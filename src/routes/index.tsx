@@ -124,7 +124,7 @@ function Index() {
         <Reveal><SectionTitle kicker="chapter 1" title="A little about me" /></Reveal>
         <div className="mt-10 grid gap-8 md:grid-cols-[1fr_1.2fr]">
           <Reveal variant="tilt-in">
-            <div className="paper-card lift relative p-6 md:rotate-[-1.5deg]" style={{ background: "color-mix(in oklab, var(--blossom) 25%, var(--card))" }}>
+            <div className="paper-card lift peel relative p-6 md:rotate-[-1.5deg]" style={{ background: "color-mix(in oklab, var(--blossom) 25%, var(--card))" }}>
               <span className="tape -top-3 left-8" />
               <div className="flex items-center gap-4">
                 <div className="grid h-20 w-20 shrink-0 place-items-center rounded-2xl text-4xl shadow-paper" style={{ background: "color-mix(in oklab, var(--sage) 60%, white)", animation: "gentle-bounce 4s ease-in-out infinite" }}>
@@ -150,7 +150,7 @@ function Index() {
           </Reveal>
 
           <Reveal variant="fade-up" delay={100}>
-            <div className="paper-card lift p-6">
+            <div className="paper-card lift peel p-6">
               <div className="flex items-baseline justify-between">
                 <h3 className="font-serif text-2xl">Daily routine</h3>
                 <span className="font-hand text-muted-foreground">~ a typical week ~</span>
@@ -406,7 +406,7 @@ function Polaroid({ title, tag, desc, color, rotate, emoji }: {
       ref={ref}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
-      className="polaroid paper-card group relative p-4 hover:rotate-0"
+      className="polaroid paper-card peel group relative p-4 hover:rotate-0"
       style={{ transform: `rotate(${rotate})`, background: "var(--card)" }}
     >
       <span className="tape -top-3 left-1/2 -translate-x-1/2" />
