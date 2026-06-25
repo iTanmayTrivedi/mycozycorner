@@ -327,11 +327,14 @@ function ProgressCard({ f }: { f: typeof favorites[number] }) {
 
 /* ----- small components ----- */
 
-function SectionTitle({ kicker, title }: { kicker: string; title: string }) {
+function SectionTitle({ kicker, title, n }: { kicker: string; title: string; n?: string }) {
   return (
-    <div>
-      <p className="font-hand text-xl text-primary">{kicker}</p>
-      <h2 className="mt-1 font-serif text-4xl md:text-5xl">{title}</h2>
+    <div className="sd-rise flex items-end gap-4">
+      {n && <span className="chapter-sticker wobble-hover">{n}</span>}
+      <div>
+        <p className="font-hand text-xl text-primary">{kicker}</p>
+        <h2 className="mt-1 font-serif text-4xl md:text-5xl scroll-mark" data-reveal="fade">{title}</h2>
+      </div>
     </div>
   );
 }
