@@ -261,7 +261,6 @@ html.has-cozy-cursor * {
   width: 36px; height: 36px; border-radius: 9999px;
   border: 1.5px solid color-mix(in oklab, var(--primary) 60%, transparent);
   background: color-mix(in oklab, var(--lamp) 18%, transparent);
-  backdrop-filter: blur(2px);
   transition: width 0.25s ease, height 0.25s ease, background 0.25s ease, border-color 0.25s ease;
   --s: 1;
 }
