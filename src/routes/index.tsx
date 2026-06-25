@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Coffee, Code2, BookOpen, Music, Mail, MapPin, Train, Sparkles,
   ExternalLink, Send, Heart, Cloud, Leaf, Camera,
@@ -7,6 +7,10 @@ import {
 import { Petals } from "@/components/cozy/Petals";
 import { ThemeToggle } from "@/components/cozy/ThemeToggle";
 import { TypeCycle } from "@/components/cozy/TypeCycle";
+import { LoadingScreen } from "@/components/cozy/LoadingScreen";
+import { CustomCursor } from "@/components/cozy/CustomCursor";
+import { Reveal } from "@/components/cozy/Reveal";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -44,32 +48,41 @@ const favorites = [
 ];
 
 function Index() {
+  useParallax();
   return (
     <div className="relative min-h-screen text-foreground">
+      <LoadingScreen />
+      <CustomCursor />
       <Petals />
       <FloatingNotes />
+      <SunbeamLayer />
 
       {/* Nav */}
       <header className="relative z-20 mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-6">
         <a href="#top" className="flex items-center gap-2">
-          <span className="grid h-10 w-10 place-items-center rounded-full bg-card shadow-paper">
+          <span className="grid h-10 w-10 place-items-center rounded-full bg-card shadow-paper" style={{ animation: "gentle-bounce 5s ease-in-out infinite" }}>
             <Cloud className="h-5 w-5 text-primary" />
           </span>
           <span className="font-display text-2xl">my corner</span>
         </a>
         <nav className="hidden gap-6 font-hand text-xl md:flex">
-          <a href="#about" className="hover:text-primary transition">about</a>
-          <a href="#work" className="hover:text-primary transition">work</a>
-          <a href="#journey" className="hover:text-primary transition">journey</a>
-          <a href="#hello" className="hover:text-primary transition">say hi</a>
+          <a href="#about" className="cozy-link">about</a>
+          <a href="#work" className="cozy-link">work</a>
+          <a href="#journey" className="cozy-link">journey</a>
+          <a href="#hello" className="cozy-link">say hi</a>
         </nav>
         <ThemeToggle />
       </header>
 
-      {/* HERO — train window */}
+      {/* HERO */}
       <section id="top" className="relative z-10 mx-auto max-w-6xl px-5 pt-6 pb-20">
-        <div className="grid items-center gap-10 md:grid-cols-[1.1fr_1fr]">
-          <div>
+        <svg aria-hidden viewBox="0 0 600 400" className="parallax pointer-events-none absolute -left-10 -top-10 h-[420px] w-[420px] opacity-30 dark:opacity-20" data-speed="0.06">
+          <path d="M40 380 Q60 280 120 240 Q90 200 130 160 Q120 110 170 100 Q170 60 220 70 Q240 30 280 60 Q320 40 330 90 Q380 90 380 140 Q420 160 400 210 Q440 250 400 290 Q420 360 360 380 Z" fill="color-mix(in oklab, var(--blossom) 80%, transparent)" />
+          <rect x="170" y="240" width="14" height="160" fill="color-mix(in oklab, var(--foreground) 30%, transparent)" />
+        </svg>
+
+        <div className="relative grid items-center gap-10 md:grid-cols-[1.1fr_1fr]">
+          <Reveal variant="slide-right">
             <p className="font-hand text-2xl text-muted-foreground">~ a quiet portfolio ~</p>
             <h1 className="mt-3 font-serif text-5xl leading-[1.05] md:text-7xl">
               Welcome to <span className="ink-underline">My Corner</span>
@@ -86,132 +99,128 @@ function Index() {
               <CozyButton href="#work">See the gallery</CozyButton>
               <CozyButton href="#hello" variant="ghost">Send a letter</CozyButton>
             </div>
-          </div>
+          </Reveal>
 
-          {/* Train window */}
-          <TrainWindow />
+          <Reveal variant="slide-left" delay={120}>
+            <TrainWindow />
+          </Reveal>
         </div>
       </section>
 
-      {/* ABOUT — student ID + favorites */}
+      {/* ABOUT */}
       <section id="about" className="relative z-10 mx-auto max-w-6xl px-5 py-16">
-        <SectionTitle kicker="chapter 1" title="A little about me" />
+        <Reveal><SectionTitle kicker="chapter 1" title="A little about me" /></Reveal>
         <div className="mt-10 grid gap-8 md:grid-cols-[1fr_1.2fr]">
-          {/* ID card */}
-          <div className="paper-card relative p-6 md:rotate-[-1.5deg]" style={{ background: "color-mix(in oklab, var(--blossom) 25%, var(--card))" }}>
-            <span className="tape -top-3 left-8" />
-            <div className="flex items-center gap-4">
-              <div className="grid h-20 w-20 shrink-0 place-items-center rounded-2xl text-4xl shadow-paper" style={{ background: "color-mix(in oklab, var(--sage) 60%, white)" }}>
-                🐈
-              </div>
-              <div className="min-w-0">
-                <p className="font-hand text-lg text-muted-foreground">student ID · class of forever</p>
-                <h3 className="truncate font-serif text-2xl">Sora Tanaka</h3>
-                <p className="text-sm text-muted-foreground">designer · maker · daydreamer</p>
-              </div>
-            </div>
-            <dl className="mt-6 grid grid-cols-2 gap-3 text-sm">
-              <Field label="club" value="Coffee & Code" />
-              <Field label="city" value="A small one" />
-              <Field label="weather" value="Always 21°C" />
-              <Field label="now" value="Reading a book" />
-            </dl>
-            <p className="mt-5 font-hand text-lg leading-relaxed">
-              "I like the in-between hours — the soft glow before evening, the hush after rain.
-              Most of my best ideas arrive then."
-            </p>
-          </div>
-
-          {/* Favorites grid */}
-          <div className="paper-card p-6">
-            <div className="flex items-baseline justify-between">
-              <h3 className="font-serif text-2xl">Daily routine</h3>
-              <span className="font-hand text-muted-foreground">~ a typical week ~</span>
-            </div>
-            <div className="mt-6 grid gap-5 sm:grid-cols-2">
-              {favorites.map((f) => (
-                <div key={f.label} className="scribble-border p-4">
-                  <div className="flex items-center gap-2">
-                    <f.icon className="h-5 w-5 text-primary" />
-                    <span className="font-hand text-xl">{f.label}</span>
-                  </div>
-                  <div className="mt-3 h-3 w-full overflow-hidden rounded-full bg-muted">
-                    <div
-                      className="h-full rounded-full transition-all"
-                      style={{
-                        width: `${f.value}%`,
-                        background: "linear-gradient(90deg, color-mix(in oklab, var(--lamp) 70%, white), var(--primary))",
-                      }}
-                    />
-                  </div>
-                  <p className="mt-2 text-xs text-muted-foreground">{f.value}%{f.suffix}</p>
+          <Reveal variant="tilt-in">
+            <div className="paper-card lift relative p-6 md:rotate-[-1.5deg]" style={{ background: "color-mix(in oklab, var(--blossom) 25%, var(--card))" }}>
+              <span className="tape -top-3 left-8" />
+              <div className="flex items-center gap-4">
+                <div className="grid h-20 w-20 shrink-0 place-items-center rounded-2xl text-4xl shadow-paper" style={{ background: "color-mix(in oklab, var(--sage) 60%, white)", animation: "gentle-bounce 4s ease-in-out infinite" }}>
+                  🐈
                 </div>
-              ))}
+                <div className="min-w-0">
+                  <p className="font-hand text-lg text-muted-foreground">student ID · class of forever</p>
+                  <h3 className="truncate font-serif text-2xl">Sora Tanaka</h3>
+                  <p className="text-sm text-muted-foreground">designer · maker · daydreamer</p>
+                </div>
+              </div>
+              <dl className="mt-6 grid grid-cols-2 gap-3 text-sm">
+                <Field label="club" value="Coffee & Code" />
+                <Field label="city" value="A small one" />
+                <Field label="weather" value="Always 21°C" />
+                <Field label="now" value="Reading a book" />
+              </dl>
+              <p className="mt-5 font-hand text-lg leading-relaxed">
+                "I like the in-between hours — the soft glow before evening, the hush after rain.
+                Most of my best ideas arrive then."
+              </p>
             </div>
-          </div>
+          </Reveal>
+
+          <Reveal variant="fade-up" delay={100}>
+            <div className="paper-card lift p-6">
+              <div className="flex items-baseline justify-between">
+                <h3 className="font-serif text-2xl">Daily routine</h3>
+                <span className="font-hand text-muted-foreground">~ a typical week ~</span>
+              </div>
+              <div className="mt-6 grid gap-5 sm:grid-cols-2">
+                {favorites.map((f, i) => (
+                  <Reveal key={f.label} variant="fade-up" delay={i * 90}>
+                    <ProgressCard f={f} />
+                  </Reveal>
+                ))}
+              </div>
+            </div>
+          </Reveal>
         </div>
       </section>
 
-      {/* WORK — polaroid corkboard */}
+      {/* WORK */}
       <section id="work" className="relative z-10 mx-auto max-w-6xl px-5 py-16">
-        <SectionTitle kicker="chapter 2" title="Things from the desk" />
-        <p className="mt-2 max-w-xl font-hand text-xl text-muted-foreground">
-          a few projects, scattered like polaroids on a corkboard. hover to tidy them up.
-        </p>
+        <Reveal><SectionTitle kicker="chapter 2" title="Things from the desk" /></Reveal>
+        <Reveal delay={80}>
+          <p className="mt-2 max-w-xl font-hand text-xl text-muted-foreground">
+            a few projects, scattered like polaroids on a corkboard. hover to tidy them up.
+          </p>
+        </Reveal>
 
         <div className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-          {projects.map((p) => (
-            <Polaroid key={p.title} {...p} />
+          {projects.map((p, i) => (
+            <Reveal key={p.title} variant="tilt-in" delay={i * 90}>
+              <Polaroid {...p} />
+            </Reveal>
           ))}
         </div>
       </section>
 
-      {/* JOURNEY — train route */}
+      {/* JOURNEY */}
       <section id="journey" className="relative z-10 mx-auto max-w-6xl px-5 py-16">
-        <SectionTitle kicker="chapter 3" title="The route I've taken" />
-        <p className="mt-2 font-hand text-xl text-muted-foreground">a slow train, with kind stops along the way.</p>
+        <Reveal><SectionTitle kicker="chapter 3" title="The route I've taken" /></Reveal>
+        <Reveal delay={80}><p className="mt-2 font-hand text-xl text-muted-foreground">a slow train, with kind stops along the way.</p></Reveal>
 
-        <div className="paper-card mt-10 overflow-hidden p-6 md:p-10">
-          <div className="relative">
-            {/* track line */}
-            <div className="absolute left-6 top-2 bottom-2 w-[3px] rounded-full md:left-1/2 md:-translate-x-1/2"
-              style={{ background: "repeating-linear-gradient(180deg, var(--primary) 0 10px, transparent 10px 18px)" }}
-            />
-            <ul className="space-y-10">
-              {timeline.map((t, i) => (
-                <li key={t.year} className={`relative grid gap-4 md:grid-cols-2 md:gap-12 ${i % 2 ? "md:[&>*:first-child]:order-2" : ""}`}>
-                  <div className={`pl-16 md:pl-0 ${i % 2 ? "md:text-left md:pl-12" : "md:text-right md:pr-12"}`}>
-                    <p className="font-hand text-2xl text-primary">{t.year}</p>
-                    <h4 className="font-serif text-xl">{t.title}</h4>
-                    <p className="text-muted-foreground">{t.desc}</p>
-                  </div>
-                  {/* stop marker */}
-                  <div className={`relative ${i % 2 ? "md:pr-12 md:text-right" : "md:pl-12"}`}>
-                    <span
-                      className="absolute left-6 top-1 grid h-10 w-10 -translate-x-1/2 place-items-center rounded-full border-2 bg-card shadow-paper md:left-1/2"
-                      style={{ borderColor: "var(--primary)", animation: "gentle-bounce 4s ease-in-out infinite", animationDelay: `${i * 0.3}s` }}
-                    >
-                      <t.icon className="h-5 w-5 text-primary" />
-                    </span>
-                    <div className="pl-16 md:pl-0">
-                      <span className="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1 text-sm">
-                        <Train className="h-4 w-4" /> {t.stop}
+        <Reveal variant="fade-up" delay={100}>
+          <div className="paper-card mt-10 overflow-hidden p-6 md:p-10">
+            <div className="relative">
+              <div className="absolute left-6 top-2 bottom-2 w-[3px] rounded-full md:left-1/2 md:-translate-x-1/2"
+                style={{ background: "repeating-linear-gradient(180deg, var(--primary) 0 10px, transparent 10px 18px)" }}
+              />
+              <ul className="space-y-10">
+                {timeline.map((t, i) => (
+                  <li key={t.year} className={`relative grid gap-4 md:grid-cols-2 md:gap-12 ${i % 2 ? "md:[&>*:first-child]:order-2" : ""}`}>
+                    <Reveal variant={i % 2 ? "slide-left" : "slide-right"} delay={i * 80}>
+                      <div className={`pl-16 md:pl-0 ${i % 2 ? "md:text-left md:pl-12" : "md:text-right md:pr-12"}`}>
+                        <p className="font-hand text-2xl text-primary">{t.year}</p>
+                        <h4 className="font-serif text-xl">{t.title}</h4>
+                        <p className="text-muted-foreground">{t.desc}</p>
+                      </div>
+                    </Reveal>
+                    <div className={`relative ${i % 2 ? "md:pr-12 md:text-right" : "md:pl-12"}`}>
+                      <span
+                        className="absolute left-6 top-1 grid h-10 w-10 -translate-x-1/2 place-items-center rounded-full border-2 bg-card shadow-paper md:left-1/2"
+                        style={{ borderColor: "var(--primary)", animation: "gentle-bounce 4s ease-in-out infinite", animationDelay: `${i * 0.3}s` }}
+                      >
+                        <t.icon className="h-5 w-5 text-primary" />
                       </span>
+                      <div className="pl-16 md:pl-0">
+                        <span className="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1 text-sm">
+                          <Train className="h-4 w-4" /> {t.stop}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
-        </div>
+        </Reveal>
       </section>
 
-      {/* CONTACT — postcard + letterbox */}
+      {/* CONTACT */}
       <section id="hello" className="relative z-10 mx-auto max-w-6xl px-5 py-16">
-        <SectionTitle kicker="chapter 4" title="Say hello" />
+        <Reveal><SectionTitle kicker="chapter 4" title="Say hello" /></Reveal>
         <div className="mt-10 grid gap-8 md:grid-cols-[1.1fr_1fr]">
-          <Postcard />
-          <Letterbox />
+          <Reveal variant="slide-right"><Postcard /></Reveal>
+          <Reveal variant="slide-left" delay={120}><Letterbox /></Reveal>
         </div>
       </section>
 
@@ -221,6 +230,70 @@ function Index() {
         </p>
         <p className="mt-1 text-xs text-muted-foreground">© {new Date().getFullYear()} my corner. take your time.</p>
       </footer>
+    </div>
+  );
+}
+
+function useParallax() {
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const els = Array.from(document.querySelectorAll<HTMLElement>(".parallax"));
+    if (!els.length) return;
+    let raf = 0;
+    let pending = false;
+    const tick = () => {
+      const y = window.scrollY;
+      for (const el of els) {
+        const speed = parseFloat(el.dataset.speed || "0.1");
+        el.style.setProperty("--py", `${y * speed * -1}px`);
+      }
+      pending = false;
+    };
+    const onScroll = () => {
+      if (pending) return;
+      pending = true;
+      raf = requestAnimationFrame(tick);
+    };
+    tick();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => { cancelAnimationFrame(raf); window.removeEventListener("scroll", onScroll); };
+  }, []);
+}
+
+function SunbeamLayer() {
+  return (
+    <div aria-hidden className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+      <div className="parallax absolute -right-40 -top-40 h-[600px] w-[600px] rounded-full" data-speed="0.04"
+        style={{ background: "radial-gradient(circle, color-mix(in oklab, var(--lamp) 35%, transparent), transparent 65%)", filter: "blur(20px)" }} />
+      <div className="parallax absolute -left-32 top-1/2 h-[500px] w-[500px] rounded-full" data-speed="0.08"
+        style={{ background: "radial-gradient(circle, color-mix(in oklab, var(--blossom) 35%, transparent), transparent 65%)", filter: "blur(20px)" }} />
+    </div>
+  );
+}
+
+function ProgressCard({ f }: { f: typeof favorites[number] }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [w, setW] = useState(0);
+  useEffect(() => {
+    const el = ref.current; if (!el) return;
+    const io = new IntersectionObserver((es) => {
+      for (const e of es) if (e.isIntersecting) { setW(f.value); io.disconnect(); break; }
+    }, { threshold: 0.3 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [f.value]);
+  return (
+    <div ref={ref} className="scribble-border lift p-4">
+      <div className="flex items-center gap-2">
+        <f.icon className="h-5 w-5 text-primary" />
+        <span className="font-hand text-xl">{f.label}</span>
+      </div>
+      <div className="mt-3 h-3 w-full overflow-hidden rounded-full bg-muted">
+        <div className="h-full rounded-full"
+          style={{ width: `${w}%`, background: "linear-gradient(90deg, color-mix(in oklab, var(--lamp) 70%, white), var(--primary))", transition: "width 1.6s cubic-bezier(0.22, 1, 0.36, 1)" }} />
+      </div>
+      <p className="mt-2 text-xs text-muted-foreground">{f.value}%{f.suffix}</p>
     </div>
   );
 }
@@ -271,44 +344,62 @@ function CozyButton({
 function Polaroid({ title, tag, desc, color, rotate, emoji }: {
   title: string; tag: string; desc: string; color: string; rotate: string; emoji: string;
 }) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = ref.current; if (!el) return;
+    const r = el.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width;
+    const py = (e.clientY - r.top) / r.height;
+    const ry = (px - 0.5) * 14;
+    const rx = (0.5 - py) * 12;
+    el.style.setProperty("--rx", `${rx}deg`);
+    el.style.setProperty("--ry", `${ry}deg`);
+  };
+  const onLeave = () => {
+    const el = ref.current; if (!el) return;
+    el.style.setProperty("--rx", "0deg");
+    el.style.setProperty("--ry", "0deg");
+  };
+
   return (
     <div
-      className="paper-card group relative cursor-pointer p-4 transition-all duration-500 hover:rotate-0 hover:-translate-y-2"
+      ref={ref}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
+      className="polaroid paper-card group relative p-4 hover:rotate-0"
       style={{ transform: `rotate(${rotate})`, background: "var(--card)" }}
     >
       <span className="tape -top-3 left-1/2 -translate-x-1/2" />
       <div
-        className="relative grid aspect-[4/3] place-items-center overflow-hidden rounded-xl text-6xl transition-all duration-500"
+        className="relative grid aspect-[4/3] place-items-center overflow-hidden rounded-xl text-6xl transition-all duration-500 group-hover:saturate-100 group-hover:brightness-105"
         style={{
           background: `linear-gradient(135deg, color-mix(in oklab, ${color} 70%, white), color-mix(in oklab, ${color} 30%, white))`,
-          filter: "saturate(0.7) brightness(0.97)",
+          filter: "saturate(0.65) brightness(0.96)",
         }}
       >
+        {/* shine sweep */}
+        <span className="pointer-events-none absolute -inset-x-1/2 -top-1/2 h-[200%] w-[60%] -translate-x-[120%] rotate-12 bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-0 transition-all duration-700 group-hover:translate-x-[80%] group-hover:opacity-100" />
         <span
-          className="transition-transform duration-500 group-hover:scale-110"
+          className="transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-6"
           style={{ filter: "drop-shadow(0 6px 10px rgba(0,0,0,0.15))" }}
         >
           {emoji}
         </span>
-        <span
-          className="absolute inset-0 transition-opacity duration-500 opacity-0 group-hover:opacity-100"
-          style={{ background: `linear-gradient(135deg, color-mix(in oklab, ${color} 90%, white), color-mix(in oklab, ${color} 50%, white))` }}
-        />
       </div>
       <div className="mt-4 flex items-start justify-between gap-2">
         <div className="min-w-0">
           <p className="font-hand text-sm text-muted-foreground">{tag}</p>
           <h3 className="truncate font-serif text-xl">{title}</h3>
         </div>
-        <Camera className="h-4 w-4 shrink-0 text-muted-foreground" />
+        <Camera className="h-4 w-4 shrink-0 text-muted-foreground transition group-hover:rotate-12 group-hover:text-primary" />
       </div>
       <p className="mt-2 text-sm text-muted-foreground">{desc}</p>
 
-      {/* hand-written tag */}
       <a
         href="#"
-        className="pointer-events-auto absolute -bottom-4 right-4 hidden rotate-[-6deg] rounded-md px-3 py-1 font-hand text-base shadow-paper group-hover:block"
-        style={{ background: "color-mix(in oklab, var(--lamp) 60%, white)", color: "var(--ink)" }}
+        className="pointer-events-auto absolute -bottom-4 right-4 translate-y-2 rotate-[-6deg] rounded-md px-3 py-1 font-hand text-base opacity-0 shadow-paper transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100"
+        style={{ background: "color-mix(in oklab, var(--lamp) 60%, white)", color: "var(--ink)", animation: "shimmer-tag 2.4s ease-in-out infinite" }}
       >
         Take a Look <ExternalLink className="inline h-3 w-3" />
       </a>
