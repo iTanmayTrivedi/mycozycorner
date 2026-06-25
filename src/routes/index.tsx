@@ -12,6 +12,9 @@ import { CustomCursor } from "@/components/cozy/CustomCursor";
 import { Reveal } from "@/components/cozy/Reveal";
 import { ScrollMarquee } from "@/components/cozy/ScrollMarquee";
 import { ScrollProgress } from "@/components/cozy/ScrollProgress";
+import { PaperPlane } from "@/components/cozy/PaperPlane";
+import { TeacupGauge } from "@/components/cozy/TeacupGauge";
+import { MeowEgg } from "@/components/cozy/MeowEgg";
 
 
 export const Route = createFileRoute("/")({
