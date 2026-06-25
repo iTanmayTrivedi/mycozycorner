@@ -10,6 +10,8 @@ import { TypeCycle } from "@/components/cozy/TypeCycle";
 import { LoadingScreen } from "@/components/cozy/LoadingScreen";
 import { CustomCursor } from "@/components/cozy/CustomCursor";
 import { Reveal } from "@/components/cozy/Reveal";
+import { ScrollMarquee } from "@/components/cozy/ScrollMarquee";
+import { ScrollProgress } from "@/components/cozy/ScrollProgress";
 
 
 export const Route = createFileRoute("/")({
@@ -52,10 +54,12 @@ function Index() {
   return (
     <div className="relative min-h-screen text-foreground">
       <LoadingScreen />
+      <ScrollProgress />
       <CustomCursor />
       <Petals />
       <FloatingNotes />
       <SunbeamLayer />
+
 
       {/* Nav */}
       <header className="relative z-20 mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-6">
@@ -107,12 +111,20 @@ function Index() {
         </div>
       </section>
 
+      {/* MARQUEE — drifts with scroll */}
+      <div className="relative z-10 py-4" style={{ background: "color-mix(in oklab, var(--blossom) 30%, transparent)" }}>
+        <ScrollMarquee
+          items={["slow mornings", "warm tea", "soft pixels", "kind code", "quiet pages", "long walks"]}
+          direction="left"
+        />
+      </div>
+
       {/* ABOUT */}
       <section id="about" className="relative z-10 mx-auto max-w-6xl px-5 py-16">
         <Reveal><SectionTitle kicker="chapter 1" title="A little about me" /></Reveal>
         <div className="mt-10 grid gap-8 md:grid-cols-[1fr_1.2fr]">
           <Reveal variant="tilt-in">
-            <div className="paper-card lift relative p-6 md:rotate-[-1.5deg]" style={{ background: "color-mix(in oklab, var(--blossom) 25%, var(--card))" }}>
+            <div className="paper-card lift peel relative p-6 md:rotate-[-1.5deg]" style={{ background: "color-mix(in oklab, var(--blossom) 25%, var(--card))" }}>
               <span className="tape -top-3 left-8" />
               <div className="flex items-center gap-4">
                 <div className="grid h-20 w-20 shrink-0 place-items-center rounded-2xl text-4xl shadow-paper" style={{ background: "color-mix(in oklab, var(--sage) 60%, white)", animation: "gentle-bounce 4s ease-in-out infinite" }}>
@@ -138,7 +150,7 @@ function Index() {
           </Reveal>
 
           <Reveal variant="fade-up" delay={100}>
-            <div className="paper-card lift p-6">
+            <div className="paper-card lift peel p-6">
               <div className="flex items-baseline justify-between">
                 <h3 className="font-serif text-2xl">Daily routine</h3>
                 <span className="font-hand text-muted-foreground">~ a typical week ~</span>
@@ -172,6 +184,15 @@ function Index() {
           ))}
         </div>
       </section>
+
+      {/* MARQUEE — reverse direction, sage band */}
+      <div className="relative z-10 py-4" style={{ background: "color-mix(in oklab, var(--sage) 35%, transparent)" }}>
+        <ScrollMarquee
+          items={["design", "code", "music", "tea", "books", "naps", "rain"]}
+          direction="right"
+          tilt={10}
+        />
+      </div>
 
       {/* JOURNEY */}
       <section id="journey" className="relative z-10 mx-auto max-w-6xl px-5 py-16">
@@ -321,25 +342,43 @@ function Field({ label, value }: { label: string; value: string }) {
 function CozyButton({
   href, children, variant = "solid",
 }: { href: string; children: React.ReactNode; variant?: "solid" | "ghost" }) {
+  const ref = useRef<HTMLAnchorElement>(null);
+  const onMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const el = ref.current; if (!el) return;
+    const r = el.getBoundingClientRect();
+    const mx = e.clientX - r.left;
+    const my = e.clientY - r.top;
+    const dx = (mx - r.width / 2) * 0.25;
+    const dy = (my - r.height / 2) * 0.35;
+    el.style.setProperty("--mx", `${mx}px`);
+    el.style.setProperty("--my", `${my}px`);
+    el.style.transform = `translate(${dx}px, ${dy - 2}px)`;
+  };
+  const onLeave = () => {
+    const el = ref.current; if (!el) return;
+    el.style.transform = "";
+  };
   return (
     <a
+      ref={ref}
       href={href}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
       className={[
-        "group inline-flex items-center gap-2 rounded-full px-6 py-3 font-hand text-xl shadow-paper transition-all",
-        "hover:-translate-y-0.5",
+        "magnetic group inline-flex items-center gap-2 rounded-full px-6 py-3 font-hand text-xl shadow-paper",
+        "transition-transform duration-300 ease-out will-change-transform",
         variant === "solid"
           ? "bg-primary text-primary-foreground"
           : "border-2 border-border bg-card text-foreground",
       ].join(" ")}
       style={{ borderRadius: "999px 22px 999px 22px / 999px" }}
-      onMouseEnter={(e) => { e.currentTarget.style.animation = "swell 0.5s ease-out forwards"; }}
-      onAnimationEnd={(e) => { e.currentTarget.style.animation = ""; }}
     >
       {children}
-      <Sparkles className="h-4 w-4 transition group-hover:rotate-12" />
+      <Sparkles className="h-4 w-4 transition group-hover:rotate-180 group-hover:scale-125 duration-500" />
     </a>
   );
 }
+
 
 function Polaroid({ title, tag, desc, color, rotate, emoji }: {
   title: string; tag: string; desc: string; color: string; rotate: string; emoji: string;
@@ -355,6 +394,8 @@ function Polaroid({ title, tag, desc, color, rotate, emoji }: {
     const rx = (0.5 - py) * 12;
     el.style.setProperty("--rx", `${rx}deg`);
     el.style.setProperty("--ry", `${ry}deg`);
+    el.style.setProperty("--mx", `${px * 100}%`);
+    el.style.setProperty("--my", `${py * 100}%`);
   };
   const onLeave = () => {
     const el = ref.current; if (!el) return;
@@ -367,7 +408,7 @@ function Polaroid({ title, tag, desc, color, rotate, emoji }: {
       ref={ref}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
-      className="polaroid paper-card group relative p-4 hover:rotate-0"
+      className="polaroid paper-card peel group relative p-4 hover:rotate-0"
       style={{ transform: `rotate(${rotate})`, background: "var(--card)" }}
     >
       <span className="tape -top-3 left-1/2 -translate-x-1/2" />

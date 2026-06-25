@@ -5,8 +5,8 @@ export function LoadingScreen() {
   const [fade, setFade] = useState(false);
 
   useEffect(() => {
-    const t1 = setTimeout(() => setFade(true), 1600);
-    const t2 = setTimeout(() => setGone(true), 2300);
+    const t1 = setTimeout(() => setFade(true), 650);
+    const t2 = setTimeout(() => setGone(true), 1100);
     return () => { clearTimeout(t1); clearTimeout(t2); };
   }, []);
 
@@ -14,7 +14,7 @@ export function LoadingScreen() {
 
   return (
     <div
-      className="fixed inset-0 z-[100] grid place-items-center transition-opacity duration-700"
+      className="fixed inset-0 z-[100] grid place-items-center transition-opacity duration-500"
       style={{
         background:
           "radial-gradient(circle at 50% 40%, color-mix(in oklab, var(--lamp) 35%, var(--background)) 0%, var(--background) 60%)",
@@ -79,7 +79,7 @@ export function LoadingScreen() {
             className="h-full rounded-full"
             style={{
               background: "linear-gradient(90deg, var(--lamp), var(--primary))",
-              animation: "load-bar 1.6s ease-out forwards",
+              animation: "load-bar 0.6s ease-out forwards",
             }}
           />
         </div>
