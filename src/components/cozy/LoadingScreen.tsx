@@ -5,8 +5,8 @@ export function LoadingScreen() {
   const [fade, setFade] = useState(false);
 
   useEffect(() => {
-    const t1 = setTimeout(() => setFade(true), 1600);
-    const t2 = setTimeout(() => setGone(true), 2300);
+    const t1 = setTimeout(() => setFade(true), 650);
+    const t2 = setTimeout(() => setGone(true), 1100);
     return () => { clearTimeout(t1); clearTimeout(t2); };
   }, []);
 
