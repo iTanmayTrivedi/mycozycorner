@@ -567,7 +567,7 @@ section { content-visibility: auto; contain-intrinsic-size: 1px 800px; }
   background-repeat: no-repeat;
   transition: background-size 1.2s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.scroll-mark[data-shown="1"] { background-size: 100% 38%; }
+[data-shown="1"] .scroll-mark, .scroll-mark[data-shown="1"] { background-size: 100% 38%; }
 
 /* ===== Cat that walks across the footer ===== */
 .cat-walker {
