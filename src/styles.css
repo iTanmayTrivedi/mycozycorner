@@ -312,3 +312,123 @@ html.has-cozy-cursor * {
   transform: translate3d(0, var(--py, 0px), 0);
   will-change: transform;
 }
+
+/* ===== Scroll Marquee (tilts on scroll) ===== */
+.scroll-marquee {
+  overflow: hidden;
+  width: 100%;
+  padding: 1.25rem 0;
+  transform: skewY(var(--mq-skew, 0deg)) rotate(var(--mq-rot, 0deg));
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+  mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+}
+.scroll-marquee-track {
+  display: inline-flex;
+  align-items: center;
+  gap: 2.5rem;
+  white-space: nowrap;
+  transform: translate3d(var(--mq-offset, 0px), 0, 0);
+  will-change: transform;
+}
+.scroll-marquee-track.mq-left  { animation: mq-scroll-l 38s linear infinite; }
+.scroll-marquee-track.mq-right { animation: mq-scroll-r 38s linear infinite; }
+.scroll-marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 2.5rem;
+  color: color-mix(in oklab, var(--foreground) 80%, transparent);
+}
+.scroll-marquee-dot {
+  color: var(--primary);
+  font-size: 1.5rem;
+  animation: spin-slow 6s linear infinite;
+  display: inline-block;
+}
+@keyframes mq-scroll-l {
+  from { margin-left: 0; }
+  to   { margin-left: -50%; }
+}
+@keyframes mq-scroll-r {
+  from { margin-left: -50%; }
+  to   { margin-left: 0; }
+}
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+
+/* ===== Sticker peel hover (cards) ===== */
+.peel {
+  position: relative;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.5s ease;
+}
+.peel::before {
+  content: "";
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 0; height: 0;
+  background:
+    linear-gradient(135deg, transparent 50%, color-mix(in oklab, var(--lamp) 40%, white) 50%);
+  border-bottom-right-radius: inherit;
+  transition: width 0.45s ease, height 0.45s ease;
+  pointer-events: none;
+  box-shadow: -2px -2px 8px rgba(0,0,0,0.08);
+}
+.peel:hover::before { width: 36px; height: 36px; }
+
+/* ===== Magnetic button shimmer ===== */
+.magnetic {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.magnetic::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: radial-gradient(120px circle at var(--mx, 50%) var(--my, 50%),
+    color-mix(in oklab, var(--lamp) 50%, transparent), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+.magnetic:hover::before { opacity: 1; }
+
+/* ===== Wobble on hover (icons / chips) ===== */
+@keyframes wobble {
+  0%, 100% { transform: rotate(0); }
+  20% { transform: rotate(-8deg); }
+  40% { transform: rotate(6deg); }
+  60% { transform: rotate(-4deg); }
+  80% { transform: rotate(2deg); }
+}
+.wobble-hover:hover { animation: wobble 0.6s ease-in-out; }
+
+/* ===== Word reveal (split text) ===== */
+.split-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(0.6em) rotate(6deg);
+  filter: blur(6px);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), filter 0.7s ease;
+  transition-delay: calc(var(--i, 0) * 60ms);
+}
+[data-shown="1"] .split-word,
+.split-word.shown {
+  opacity: 1;
+  transform: none;
+  filter: blur(0);
+}
+
+/* ===== Polaroid scroll-tilt extra glow ===== */
+.polaroid::after {
+  content: "";
+  position: absolute; inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%),
+    color-mix(in oklab, var(--lamp) 35%, transparent), transparent 50%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+.polaroid:hover::after { opacity: 1; }
+
