@@ -62,6 +62,9 @@ function Index() {
       <Petals />
       <FloatingNotes />
       <SunbeamLayer />
+      <PaperPlane />
+      <TeacupGauge />
+      <MeowEgg />
 
 
       {/* Nav */}
