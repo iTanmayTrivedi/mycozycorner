@@ -532,7 +532,7 @@ function Postcard() {
         </div>
         <div className="relative p-6">
           <div className="absolute right-5 top-5 h-20 w-16 rotate-3 border-2 border-dashed border-border p-1 text-center">
-            <div className="h-full w-full grid place-items-center text-2xl" style={{ background: "color-mix(in oklab, var(--blossom) 50%, white)" }}>
+            <div className="h-full w-full grid place-items-center text-2xl stamp" style={{ background: "color-mix(in oklab, var(--blossom) 50%, white)", border: "2px dashed color-mix(in oklab, var(--primary) 60%, transparent)", borderRadius: "8px" }}>
               🌸
             </div>
           </div>
