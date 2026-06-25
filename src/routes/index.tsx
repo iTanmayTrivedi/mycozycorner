@@ -54,10 +54,12 @@ function Index() {
   return (
     <div className="relative min-h-screen text-foreground">
       <LoadingScreen />
+      <ScrollProgress />
       <CustomCursor />
       <Petals />
       <FloatingNotes />
       <SunbeamLayer />
+
 
       {/* Nav */}
       <header className="relative z-20 mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-6">
