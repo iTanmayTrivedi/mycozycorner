@@ -342,25 +342,43 @@ function Field({ label, value }: { label: string; value: string }) {
 function CozyButton({
   href, children, variant = "solid",
 }: { href: string; children: React.ReactNode; variant?: "solid" | "ghost" }) {
+  const ref = useRef<HTMLAnchorElement>(null);
+  const onMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const el = ref.current; if (!el) return;
+    const r = el.getBoundingClientRect();
+    const mx = e.clientX - r.left;
+    const my = e.clientY - r.top;
+    const dx = (mx - r.width / 2) * 0.25;
+    const dy = (my - r.height / 2) * 0.35;
+    el.style.setProperty("--mx", `${mx}px`);
+    el.style.setProperty("--my", `${my}px`);
+    el.style.transform = `translate(${dx}px, ${dy - 2}px)`;
+  };
+  const onLeave = () => {
+    const el = ref.current; if (!el) return;
+    el.style.transform = "";
+  };
   return (
     <a
+      ref={ref}
       href={href}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
       className={[
-        "group inline-flex items-center gap-2 rounded-full px-6 py-3 font-hand text-xl shadow-paper transition-all",
-        "hover:-translate-y-0.5",
+        "magnetic group inline-flex items-center gap-2 rounded-full px-6 py-3 font-hand text-xl shadow-paper",
+        "transition-transform duration-300 ease-out will-change-transform",
         variant === "solid"
           ? "bg-primary text-primary-foreground"
           : "border-2 border-border bg-card text-foreground",
       ].join(" ")}
       style={{ borderRadius: "999px 22px 999px 22px / 999px" }}
-      onMouseEnter={(e) => { e.currentTarget.style.animation = "swell 0.5s ease-out forwards"; }}
-      onAnimationEnd={(e) => { e.currentTarget.style.animation = ""; }}
     >
       {children}
-      <Sparkles className="h-4 w-4 transition group-hover:rotate-12" />
+      <Sparkles className="h-4 w-4 transition group-hover:rotate-180 group-hover:scale-125 duration-500" />
     </a>
   );
 }
+
 
 function Polaroid({ title, tag, desc, color, rotate, emoji }: {
   title: string; tag: string; desc: string; color: string; rotate: string; emoji: string;
