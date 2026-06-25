@@ -185,7 +185,7 @@ function Index() {
         <div className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
           {projects.map((p, i) => (
             <Reveal key={p.title} variant="tilt-in" delay={i * 90}>
-              <Polaroid {...p} />
+              <div className="sd-tilt-in"><Polaroid {...p} /></div>
             </Reveal>
           ))}
         </div>
