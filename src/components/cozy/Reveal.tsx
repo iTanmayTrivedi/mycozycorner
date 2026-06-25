@@ -7,15 +7,13 @@ export function Reveal({
   variant = "fade-up",
   delay = 0,
   className = "",
-  as: As = "div",
 }: {
   children: ReactNode;
   variant?: Variant;
   delay?: number;
   className?: string;
-  as?: keyof React.JSX.IntrinsicElements;
 }) {
-  const ref = useRef<HTMLElement | null>(null);
+  const ref = useRef<HTMLDivElement | null>(null);
   const [shown, setShown] = useState(false);
 
   useEffect(() => {
@@ -47,15 +45,15 @@ export function Reveal({
   };
 
   return (
-    // @ts-expect-error dynamic tag
-    <As
-      ref={ref as never}
+    <div
+      ref={ref}
       data-reveal={variant}
       data-shown={shown ? "1" : "0"}
       style={style}
       className={className}
     >
       {children}
-    </As>
+    </div>
   );
 }
+
