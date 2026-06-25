@@ -12,6 +12,9 @@ import { CustomCursor } from "@/components/cozy/CustomCursor";
 import { Reveal } from "@/components/cozy/Reveal";
 import { ScrollMarquee } from "@/components/cozy/ScrollMarquee";
 import { ScrollProgress } from "@/components/cozy/ScrollProgress";
+import { PaperPlane } from "@/components/cozy/PaperPlane";
+import { TeacupGauge } from "@/components/cozy/TeacupGauge";
+import { MeowEgg } from "@/components/cozy/MeowEgg";
 
 
 export const Route = createFileRoute("/")({
@@ -59,6 +62,9 @@ function Index() {
       <Petals />
       <FloatingNotes />
       <SunbeamLayer />
+      <PaperPlane />
+      <TeacupGauge />
+      <MeowEgg />
 
 
       {/* Nav */}
@@ -121,7 +127,7 @@ function Index() {
 
       {/* ABOUT */}
       <section id="about" className="relative z-10 mx-auto max-w-6xl px-5 py-16">
-        <Reveal><SectionTitle kicker="chapter 1" title="A little about me" /></Reveal>
+        <Reveal><SectionTitle kicker="chapter 1" title="A little about me" n="1" /></Reveal>
         <div className="mt-10 grid gap-8 md:grid-cols-[1fr_1.2fr]">
           <Reveal variant="tilt-in">
             <div className="paper-card lift peel relative p-6 md:rotate-[-1.5deg]" style={{ background: "color-mix(in oklab, var(--blossom) 25%, var(--card))" }}>
@@ -169,7 +175,7 @@ function Index() {
 
       {/* WORK */}
       <section id="work" className="relative z-10 mx-auto max-w-6xl px-5 py-16">
-        <Reveal><SectionTitle kicker="chapter 2" title="Things from the desk" /></Reveal>
+        <Reveal><SectionTitle kicker="chapter 2" title="Things from the desk" n="2" /></Reveal>
         <Reveal delay={80}>
           <p className="mt-2 max-w-xl font-hand text-xl text-muted-foreground">
             a few projects, scattered like polaroids on a corkboard. hover to tidy them up.
@@ -179,7 +185,7 @@ function Index() {
         <div className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
           {projects.map((p, i) => (
             <Reveal key={p.title} variant="tilt-in" delay={i * 90}>
-              <Polaroid {...p} />
+              <div className="sd-tilt-in"><Polaroid {...p} /></div>
             </Reveal>
           ))}
         </div>
@@ -196,7 +202,7 @@ function Index() {
 
       {/* JOURNEY */}
       <section id="journey" className="relative z-10 mx-auto max-w-6xl px-5 py-16">
-        <Reveal><SectionTitle kicker="chapter 3" title="The route I've taken" /></Reveal>
+        <Reveal><SectionTitle kicker="chapter 3" title="The route I've taken" n="3" /></Reveal>
         <Reveal delay={80}><p className="mt-2 font-hand text-xl text-muted-foreground">a slow train, with kind stops along the way.</p></Reveal>
 
         <Reveal variant="fade-up" delay={100}>
@@ -238,18 +244,21 @@ function Index() {
 
       {/* CONTACT */}
       <section id="hello" className="relative z-10 mx-auto max-w-6xl px-5 py-16">
-        <Reveal><SectionTitle kicker="chapter 4" title="Say hello" /></Reveal>
+        <Reveal><SectionTitle kicker="chapter 4" title="Say hello" n="4" /></Reveal>
         <div className="mt-10 grid gap-8 md:grid-cols-[1.1fr_1fr]">
           <Reveal variant="slide-right"><Postcard /></Reveal>
           <Reveal variant="slide-left" delay={120}><Letterbox /></Reveal>
         </div>
       </section>
 
-      <footer className="relative z-10 mx-auto max-w-6xl px-5 py-12 text-center">
+      <footer className="relative z-10 mx-auto max-w-6xl px-5 py-12 text-center overflow-hidden">
         <p className="font-hand text-xl text-muted-foreground">
           made with <Heart className="inline h-4 w-4 -translate-y-0.5" /> and a warm cup of something
         </p>
-        <p className="mt-1 text-xs text-muted-foreground">© {new Date().getFullYear()} my corner. take your time.</p>
+        <p className="mt-1 text-xs text-muted-foreground">© {new Date().getFullYear()} my corner. take your time. <span className="ml-2 opacity-70">psst — press <kbd className="rounded border border-border px-1.5 py-0.5 font-hand">m</kbd></span></p>
+        <div className="cat-walker" aria-hidden>
+          <div className="cat-bob text-3xl select-none">🐈</div>
+        </div>
       </footer>
     </div>
   );
@@ -285,10 +294,10 @@ function useParallax() {
 function SunbeamLayer() {
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-      <div className="parallax absolute -right-40 -top-40 h-[600px] w-[600px] rounded-full" data-speed="0.04"
-        style={{ background: "radial-gradient(circle, color-mix(in oklab, var(--lamp) 35%, transparent), transparent 65%)", filter: "blur(20px)" }} />
-      <div className="parallax absolute -left-32 top-1/2 h-[500px] w-[500px] rounded-full" data-speed="0.08"
-        style={{ background: "radial-gradient(circle, color-mix(in oklab, var(--blossom) 35%, transparent), transparent 65%)", filter: "blur(20px)" }} />
+      <div className="parallax absolute -right-40 -top-40 h-[420px] w-[420px] rounded-full" data-speed="0.04"
+        style={{ background: "radial-gradient(circle, color-mix(in oklab, var(--lamp) 35%, transparent), transparent 65%)" }} />
+      <div className="parallax absolute -left-32 top-1/2 h-[360px] w-[360px] rounded-full" data-speed="0.08"
+        style={{ background: "radial-gradient(circle, color-mix(in oklab, var(--blossom) 35%, transparent), transparent 65%)" }} />
     </div>
   );
 }
@@ -321,11 +330,14 @@ function ProgressCard({ f }: { f: typeof favorites[number] }) {
 
 /* ----- small components ----- */
 
-function SectionTitle({ kicker, title }: { kicker: string; title: string }) {
+function SectionTitle({ kicker, title, n }: { kicker: string; title: string; n?: string }) {
   return (
-    <div>
-      <p className="font-hand text-xl text-primary">{kicker}</p>
-      <h2 className="mt-1 font-serif text-4xl md:text-5xl">{title}</h2>
+    <div className="sd-rise flex items-end gap-4">
+      {n && <span className="chapter-sticker wobble-hover">{n}</span>}
+      <div>
+        <p className="font-hand text-xl text-primary">{kicker}</p>
+        <h2 className="mt-1 font-serif text-4xl md:text-5xl scroll-mark" data-reveal="fade">{title}</h2>
+      </div>
     </div>
   );
 }
@@ -520,7 +532,7 @@ function Postcard() {
         </div>
         <div className="relative p-6">
           <div className="absolute right-5 top-5 h-20 w-16 rotate-3 border-2 border-dashed border-border p-1 text-center">
-            <div className="h-full w-full grid place-items-center text-2xl" style={{ background: "color-mix(in oklab, var(--blossom) 50%, white)" }}>
+            <div className="h-full w-full grid place-items-center text-2xl stamp" style={{ background: "color-mix(in oklab, var(--blossom) 50%, white)", border: "2px dashed color-mix(in oklab, var(--primary) 60%, transparent)", borderRadius: "8px" }}>
               🌸
             </div>
           </div>

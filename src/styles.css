@@ -120,13 +120,20 @@
     font-family: var(--font-sans);
   }
   body {
+    min-height: 100vh;
+    position: relative;
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
     background-image:
       radial-gradient(circle at 20% 10%, color-mix(in oklab, var(--blossom) 55%, transparent) 0%, transparent 40%),
       radial-gradient(circle at 80% 20%, color-mix(in oklab, var(--sky-soft) 50%, transparent) 0%, transparent 45%),
-      radial-gradient(circle at 50% 90%, color-mix(in oklab, var(--sage) 45%, transparent) 0%, transparent 50%),
-      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.1  0 0 0 0 0.1  0 0 0 0 0.1  0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-    background-attachment: fixed;
-    min-height: 100vh;
+      radial-gradient(circle at 50% 90%, color-mix(in oklab, var(--sage) 45%, transparent) 0%, transparent 50%);
+    transform: translateZ(0);
   }
   h1, h2, h3, h4 {
     font-family: var(--font-serif);
@@ -254,7 +261,6 @@ html.has-cozy-cursor * {
   width: 36px; height: 36px; border-radius: 9999px;
   border: 1.5px solid color-mix(in oklab, var(--primary) 60%, transparent);
   background: color-mix(in oklab, var(--lamp) 18%, transparent);
-  backdrop-filter: blur(2px);
   transition: width 0.25s ease, height 0.25s ease, background 0.25s ease, border-color 0.25s ease;
   --s: 1;
 }
@@ -432,3 +438,173 @@ html.has-cozy-cursor * {
 }
 .polaroid:hover::after { opacity: 1; }
 
+
+/* ===== Section content-visibility for cheaper offscreen paints ===== */
+section { content-visibility: auto; contain-intrinsic-size: 1px 800px; }
+
+/* ===== Scroll-driven animations (modern browsers).
+   Pure CSS, zero JS, runs on compositor. Falls back to a static state
+   for browsers without scroll-timeline support. ===== */
+@supports (animation-timeline: view()) {
+  .sd-rise {
+    animation: sd-rise linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 35%;
+  }
+  .sd-tilt-in {
+    animation: sd-tilt linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 40%;
+  }
+  .sd-drift-x {
+    animation: sd-drift-x linear both;
+    animation-timeline: view();
+    animation-range: cover 0% cover 100%;
+  }
+  .sd-rotate-on-scroll {
+    animation: sd-spin linear both;
+    animation-timeline: scroll(root);
+  }
+  .sd-pin-zoom {
+    animation: sd-pinzoom linear both;
+    animation-timeline: view();
+    animation-range: cover 0% cover 100%;
+  }
+}
+@keyframes sd-rise {
+  from { opacity: 0; transform: translateY(60px) scale(0.96); filter: blur(8px); }
+  to   { opacity: 1; transform: none; filter: blur(0); }
+}
+@keyframes sd-tilt {
+  from { opacity: 0; transform: rotate(-8deg) translateY(40px); filter: blur(6px); }
+  to   { opacity: 1; transform: rotate(0) translateY(0); filter: blur(0); }
+}
+@keyframes sd-drift-x {
+  from { transform: translateX(-12vw); }
+  to   { transform: translateX(12vw); }
+}
+@keyframes sd-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes sd-pinzoom {
+  0%   { transform: scale(0.92); filter: brightness(0.96); }
+  50%  { transform: scale(1.02); filter: brightness(1.04); }
+  100% { transform: scale(0.98); filter: brightness(1); }
+}
+
+/* ===== Paper plane that crosses the page driven by scroll ===== */
+.paper-plane-track {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+.paper-plane {
+  position: absolute;
+  left: 0;
+  top: 18vh;
+  width: 44px;
+  height: 44px;
+  transform: translate3d(calc(var(--pp, 0) * 100vw - 60px), calc(sin(var(--pp, 0) * 6.283) * 80px), 0) rotate(calc(var(--pp, 0) * 30deg - 6deg));
+  transition: transform 0.18s linear;
+  filter: drop-shadow(0 6px 10px rgba(30,41,59,0.18));
+}
+.paper-plane-trail {
+  position: absolute;
+  top: 18vh;
+  left: 0;
+  height: 2px;
+  width: calc(var(--pp, 0) * 100vw);
+  background: repeating-linear-gradient(90deg, color-mix(in oklab, var(--primary) 60%, transparent) 0 6px, transparent 6px 12px);
+  transform: translateY(20px);
+  opacity: 0.45;
+}
+
+/* ===== Chibi teacup gauge (scroll fill) bottom-right ===== */
+.teacup-gauge {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 30;
+  width: 64px;
+  height: 72px;
+  pointer-events: none;
+  filter: drop-shadow(0 8px 16px rgba(30,41,59,0.18));
+}
+.teacup-fill {
+  transform-origin: bottom;
+  transform: scaleY(var(--fill, 0));
+  transition: transform 0.25s ease-out;
+}
+.teacup-steam {
+  transform-origin: center bottom;
+  animation: steam 2.4s ease-in infinite;
+}
+.teacup-steam.delay-1 { animation-delay: 0.6s; }
+.teacup-steam.delay-2 { animation-delay: 1.2s; }
+
+/* ===== Section sticker (number badge that wobbles) ===== */
+.chapter-sticker {
+  display: inline-grid;
+  place-items: center;
+  width: 56px; height: 56px;
+  border-radius: 50% 50% 48% 52% / 52% 48% 50% 50%;
+  background: color-mix(in oklab, var(--lamp) 70%, white);
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  box-shadow: 0 6px 14px -6px rgba(30,41,59,0.3), inset 0 -3px 0 rgba(0,0,0,0.06);
+  transform: rotate(-6deg);
+  transition: transform 0.4s cubic-bezier(0.22, 1.4, 0.36, 1);
+}
+.chapter-sticker:hover { transform: rotate(6deg) scale(1.08); }
+
+/* ===== Word-by-word marker highlight on scroll ===== */
+.scroll-mark {
+  background-image: linear-gradient(120deg, color-mix(in oklab, var(--lamp) 70%, transparent) 0%, color-mix(in oklab, var(--blossom) 70%, transparent) 100%);
+  background-size: 0% 38%;
+  background-position: 0 88%;
+  background-repeat: no-repeat;
+  transition: background-size 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+[data-shown="1"] .scroll-mark, .scroll-mark[data-shown="1"] { background-size: 100% 38%; }
+
+/* ===== Cat that walks across the footer ===== */
+.cat-walker {
+  position: absolute;
+  bottom: 12px;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  animation: cat-walk 22s linear infinite;
+}
+@keyframes cat-walk {
+  0%   { transform: translateX(-10vw) scaleX(1); }
+  49%  { transform: translateX(100vw) scaleX(1); }
+  50%  { transform: translateX(100vw) scaleX(-1); }
+  99%  { transform: translateX(-10vw) scaleX(-1); }
+  100% { transform: translateX(-10vw) scaleX(1); }
+}
+.cat-bob { animation: cat-bob 0.45s ease-in-out infinite; transform-origin: bottom; }
+@keyframes cat-bob {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50%      { transform: translateY(-3px) rotate(1deg); }
+}
+
+/* ===== Wiggle stamp (appears on contact section) ===== */
+@keyframes stamp-in {
+  0%   { opacity: 0; transform: rotate(-30deg) scale(2); }
+  60%  { opacity: 1; transform: rotate(-14deg) scale(0.92); }
+  100% { opacity: 1; transform: rotate(-12deg) scale(1); }
+}
+.stamp {
+  animation: stamp-in 0.7s cubic-bezier(0.22, 1.4, 0.36, 1) both;
+}
+
+/* ===== Reduce motion safety ===== */
+@media (prefers-reduced-motion: reduce) {
+  .paper-plane, .paper-plane-trail, .cat-walker, .teacup-fill, .sd-rotate-on-scroll {
+    animation: none !important;
+    transition: none !important;
+  }
+}

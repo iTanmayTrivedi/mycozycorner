@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 type Petal = { id: number; left: number; delay: number; duration: number; drift: number; size: number; rotate: number };
 
-export function Petals({ count = 18 }: { count?: number }) {
+export function Petals({ count = 12 }: { count?: number }) {
   const [petals, setPetals] = useState<Petal[]>([]);
 
   useEffect(() => {
