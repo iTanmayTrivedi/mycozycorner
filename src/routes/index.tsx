@@ -285,10 +285,10 @@ function useParallax() {
 function SunbeamLayer() {
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-      <div className="parallax absolute -right-40 -top-40 h-[600px] w-[600px] rounded-full" data-speed="0.04"
-        style={{ background: "radial-gradient(circle, color-mix(in oklab, var(--lamp) 35%, transparent), transparent 65%)", filter: "blur(20px)" }} />
-      <div className="parallax absolute -left-32 top-1/2 h-[500px] w-[500px] rounded-full" data-speed="0.08"
-        style={{ background: "radial-gradient(circle, color-mix(in oklab, var(--blossom) 35%, transparent), transparent 65%)", filter: "blur(20px)" }} />
+      <div className="parallax absolute -right-40 -top-40 h-[420px] w-[420px] rounded-full" data-speed="0.04"
+        style={{ background: "radial-gradient(circle, color-mix(in oklab, var(--lamp) 35%, transparent), transparent 65%)" }} />
+      <div className="parallax absolute -left-32 top-1/2 h-[360px] w-[360px] rounded-full" data-speed="0.08"
+        style={{ background: "radial-gradient(circle, color-mix(in oklab, var(--blossom) 35%, transparent), transparent 65%)" }} />
     </div>
   );
 }
