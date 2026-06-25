@@ -111,6 +111,14 @@ function Index() {
         </div>
       </section>
 
+      {/* MARQUEE — drifts with scroll */}
+      <div className="relative z-10 py-4" style={{ background: "color-mix(in oklab, var(--blossom) 30%, transparent)" }}>
+        <ScrollMarquee
+          items={["slow mornings", "warm tea", "soft pixels", "kind code", "quiet pages", "long walks"]}
+          direction="left"
+        />
+      </div>
+
       {/* ABOUT */}
       <section id="about" className="relative z-10 mx-auto max-w-6xl px-5 py-16">
         <Reveal><SectionTitle kicker="chapter 1" title="A little about me" /></Reveal>
