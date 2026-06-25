@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Coffee, Code2, BookOpen, Music, Mail, MapPin, Train, Sparkles,
   ExternalLink, Send, Heart, Cloud, Leaf, Camera,
@@ -7,6 +7,10 @@ import {
 import { Petals } from "@/components/cozy/Petals";
 import { ThemeToggle } from "@/components/cozy/ThemeToggle";
 import { TypeCycle } from "@/components/cozy/TypeCycle";
+import { LoadingScreen } from "@/components/cozy/LoadingScreen";
+import { CustomCursor } from "@/components/cozy/CustomCursor";
+import { Reveal } from "@/components/cozy/Reveal";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
