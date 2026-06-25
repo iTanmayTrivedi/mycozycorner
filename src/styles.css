@@ -200,3 +200,115 @@
   0%, 100% { filter: drop-shadow(0 0 10px color-mix(in oklab, var(--lamp) 70%, transparent)); }
   50%      { filter: drop-shadow(0 0 22px color-mix(in oklab, var(--lamp) 90%, transparent)); }
 }
+
+@keyframes steam {
+  0%   { transform: translateY(0) scaleY(0.6); opacity: 0; }
+  30%  { opacity: 0.8; }
+  100% { transform: translateY(-30px) scaleY(1.4); opacity: 0; }
+}
+@keyframes load-bar {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+@keyframes shimmer-tag {
+  0%, 100% { transform: rotate(-6deg) translateY(0); }
+  50%      { transform: rotate(-4deg) translateY(-2px); }
+}
+
+/* ===== Scroll reveal ===== */
+[data-reveal] {
+  opacity: 0;
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1), filter 0.9s ease;
+  filter: blur(4px);
+}
+[data-reveal="fade-up"]      { transform: translate3d(0, 36px, 0); }
+[data-reveal="fade"]         { transform: none; }
+[data-reveal="slide-left"]   { transform: translate3d(-48px, 0, 0); }
+[data-reveal="slide-right"]  { transform: translate3d(48px, 0, 0); }
+[data-reveal="zoom"]         { transform: scale(0.92); }
+[data-reveal="tilt-in"]      { transform: rotate(-6deg) translate3d(0, 30px, 0) scale(0.96); }
+[data-reveal][data-shown="1"] {
+  opacity: 1;
+  transform: none;
+  filter: blur(0);
+}
+
+/* ===== Custom cursor ===== */
+html.has-cozy-cursor,
+html.has-cozy-cursor * {
+  cursor: none !important;
+}
+.cozy-dot, .cozy-ring, .cozy-trail {
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  will-change: transform;
+}
+.cozy-dot {
+  width: 8px; height: 8px; border-radius: 9999px;
+  background: var(--primary);
+  box-shadow: 0 0 8px color-mix(in oklab, var(--primary) 60%, transparent);
+}
+.cozy-ring {
+  width: 36px; height: 36px; border-radius: 9999px;
+  border: 1.5px solid color-mix(in oklab, var(--primary) 60%, transparent);
+  background: color-mix(in oklab, var(--lamp) 18%, transparent);
+  backdrop-filter: blur(2px);
+  transition: width 0.25s ease, height 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+  --s: 1;
+}
+.cozy-ring[data-hover="1"] {
+  width: 56px; height: 56px;
+  margin-left: -10px; margin-top: -10px;
+  background: color-mix(in oklab, var(--blossom) 35%, transparent);
+  border-color: color-mix(in oklab, var(--primary) 80%, transparent);
+}
+.cozy-trail {
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+/* ===== Hover lifts (organic, GPU only) ===== */
+.lift {
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.45s ease, filter 0.45s ease;
+  will-change: transform;
+}
+.lift:hover {
+  transform: translateY(-6px) rotate(-0.4deg);
+  box-shadow: 0 28px 50px -28px rgba(30, 41, 59, 0.4);
+}
+
+/* Magnetic underline for nav */
+.cozy-link {
+  position: relative;
+}
+.cozy-link::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -6px;
+  height: 8px;
+  background:
+    radial-gradient(circle, color-mix(in oklab, var(--primary) 70%, transparent) 1.5px, transparent 2px) 0 50% / 8px 8px repeat-x;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.cozy-link:hover::after { transform: scaleX(1); }
+
+/* Polaroid tilt — JS sets --rx/--ry */
+.polaroid {
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.5s ease;
+  will-change: transform;
+}
+.polaroid:hover {
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(-6px) scale(1.02);
+  box-shadow: 0 36px 60px -28px rgba(30, 41, 59, 0.5);
+}
+
+/* parallax helper */
+.parallax {
+  transform: translate3d(0, var(--py, 0px), 0);
+  will-change: transform;
+}
