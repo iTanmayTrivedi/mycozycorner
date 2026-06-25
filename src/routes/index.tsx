@@ -10,6 +10,8 @@ import { TypeCycle } from "@/components/cozy/TypeCycle";
 import { LoadingScreen } from "@/components/cozy/LoadingScreen";
 import { CustomCursor } from "@/components/cozy/CustomCursor";
 import { Reveal } from "@/components/cozy/Reveal";
+import { ScrollMarquee } from "@/components/cozy/ScrollMarquee";
+import { ScrollProgress } from "@/components/cozy/ScrollProgress";
 
 
 export const Route = createFileRoute("/")({
