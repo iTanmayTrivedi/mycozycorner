@@ -394,6 +394,8 @@ function Polaroid({ title, tag, desc, color, rotate, emoji }: {
     const rx = (0.5 - py) * 12;
     el.style.setProperty("--rx", `${rx}deg`);
     el.style.setProperty("--ry", `${ry}deg`);
+    el.style.setProperty("--mx", `${px * 100}%`);
+    el.style.setProperty("--my", `${py * 100}%`);
   };
   const onLeave = () => {
     const el = ref.current; if (!el) return;
