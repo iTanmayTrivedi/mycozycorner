@@ -79,7 +79,7 @@ export function LoadingScreen() {
             className="h-full rounded-full"
             style={{
               background: "linear-gradient(90deg, var(--lamp), var(--primary))",
-              animation: "load-bar 1.6s ease-out forwards",
+              animation: "load-bar 0.6s ease-out forwards",
             }}
           />
         </div>
