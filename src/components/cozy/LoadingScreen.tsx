@@ -14,7 +14,7 @@ export function LoadingScreen() {
 
   return (
     <div
-      className="fixed inset-0 z-[100] grid place-items-center transition-opacity duration-700"
+      className="fixed inset-0 z-[100] grid place-items-center transition-opacity duration-500"
       style={{
         background:
           "radial-gradient(circle at 50% 40%, color-mix(in oklab, var(--lamp) 35%, var(--background)) 0%, var(--background) 60%)",
