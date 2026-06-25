@@ -1,29 +1,463 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+import {
+  Coffee, Code2, BookOpen, Music, Mail, MapPin, Train, Sparkles,
+  ExternalLink, Send, Heart, Cloud, Leaf, Camera,
+} from "lucide-react";
+import { Petals } from "@/components/cozy/Petals";
+import { ThemeToggle } from "@/components/cozy/ThemeToggle";
+import { TypeCycle } from "@/components/cozy/TypeCycle";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Your App" },
-      { name: "description", content: "Replace this with a one-sentence description of your app." },
-      { property: "og:title", content: "Your App" },
-      { property: "og:description", content: "Replace this with a one-sentence description of your app." },
+      { title: "My Corner — A Cozy Slice-of-Life Portfolio" },
+      { name: "description", content: "A warm, hand-drawn portfolio. Coffee, code, and quiet afternoons." },
+      { property: "og:title", content: "My Corner — A Cozy Slice-of-Life Portfolio" },
+      { property: "og:description", content: "Coffee, code, and quiet afternoons. Step into my corner." },
     ],
   }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
+const projects = [
+  { title: "Café Loop", tag: "Web App", desc: "A daily-journaling app that feels like a paper notebook.", color: "var(--blossom)", rotate: "-3deg", emoji: "📓" },
+  { title: "Lo-fi Garden", tag: "Music Player", desc: "A tiny browser radio that grows plants while you listen.", color: "var(--sage)", rotate: "2deg", emoji: "🌱" },
+  { title: "Train Window", tag: "Generative Art", desc: "Scenery that scrolls by, gently, while you think.", color: "var(--sky-soft)", rotate: "-1deg", emoji: "🚃" },
+  { title: "Pen Pal", tag: "iOS Concept", desc: "Slow messaging — letters that arrive tomorrow.", color: "var(--lamp)", rotate: "4deg", emoji: "✉️" },
+  { title: "Kotatsu Kit", tag: "Design System", desc: "Warm, soft tokens for cozy product interfaces.", color: "var(--blossom)", rotate: "1deg", emoji: "🍵" },
+  { title: "Sunbeam", tag: "CLI Tool", desc: "Tiny terminal companion that wishes you a good morning.", color: "var(--sage)", rotate: "-2deg", emoji: "☀️" },
+];
+
+const timeline = [
+  { year: "2019", stop: "Kettle Station", title: "First job, first deploy", desc: "Built dashboards, drank a lot of tea.", icon: Coffee },
+  { year: "2021", stop: "Notebook Junction", title: "Design + Code crossover", desc: "Started shipping my own little apps.", icon: BookOpen },
+  { year: "2023", stop: "Studio Lane", title: "Joined a tiny studio", desc: "Worked on cozy products for kind people.", icon: Sparkles },
+  { year: "2025", stop: "Garden Terminal", title: "Independent maker", desc: "Slow craft. Long walks. Better code.", icon: Leaf },
+];
+
+const favorites = [
+  { label: "Coffee consumed", value: 87, max: 100, icon: Coffee, suffix: " cups / mo" },
+  { label: "Lines coded", value: 64, max: 100, icon: Code2, suffix: " (well, mostly)" },
+  { label: "Books read", value: 42, max: 100, icon: BookOpen, suffix: " this year" },
+  { label: "Lo-fi listened", value: 91, max: 100, icon: Music, suffix: " always on" },
+];
+
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="relative min-h-screen text-foreground">
+      <Petals />
+      <FloatingNotes />
+
+      {/* Nav */}
+      <header className="relative z-20 mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-6">
+        <a href="#top" className="flex items-center gap-2">
+          <span className="grid h-10 w-10 place-items-center rounded-full bg-card shadow-paper">
+            <Cloud className="h-5 w-5 text-primary" />
+          </span>
+          <span className="font-display text-2xl">my corner</span>
+        </a>
+        <nav className="hidden gap-6 font-hand text-xl md:flex">
+          <a href="#about" className="hover:text-primary transition">about</a>
+          <a href="#work" className="hover:text-primary transition">work</a>
+          <a href="#journey" className="hover:text-primary transition">journey</a>
+          <a href="#hello" className="hover:text-primary transition">say hi</a>
+        </nav>
+        <ThemeToggle />
+      </header>
+
+      {/* HERO — train window */}
+      <section id="top" className="relative z-10 mx-auto max-w-6xl px-5 pt-6 pb-20">
+        <div className="grid items-center gap-10 md:grid-cols-[1.1fr_1fr]">
+          <div>
+            <p className="font-hand text-2xl text-muted-foreground">~ a quiet portfolio ~</p>
+            <h1 className="mt-3 font-serif text-5xl leading-[1.05] md:text-7xl">
+              Welcome to <span className="ink-underline">My Corner</span>
+            </h1>
+            <p className="mt-6 max-w-md text-lg text-muted-foreground">
+              Pull up a chair. The kettle's on. I make small, careful things on the internet —
+              somewhere between a sketchbook and a software studio.
+            </p>
+            <div className="mt-6 flex items-baseline gap-3">
+              <span className="font-hand text-3xl md:text-4xl text-muted-foreground">today, I'm</span>
+              <TypeCycle words={["Designing.", "Coding.", "Daydreaming.", "Sketching.", "Brewing tea."]} />
+            </div>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <CozyButton href="#work">See the gallery</CozyButton>
+              <CozyButton href="#hello" variant="ghost">Send a letter</CozyButton>
+            </div>
+          </div>
+
+          {/* Train window */}
+          <TrainWindow />
+        </div>
+      </section>
+
+      {/* ABOUT — student ID + favorites */}
+      <section id="about" className="relative z-10 mx-auto max-w-6xl px-5 py-16">
+        <SectionTitle kicker="chapter 1" title="A little about me" />
+        <div className="mt-10 grid gap-8 md:grid-cols-[1fr_1.2fr]">
+          {/* ID card */}
+          <div className="paper-card relative p-6 md:rotate-[-1.5deg]" style={{ background: "color-mix(in oklab, var(--blossom) 25%, var(--card))" }}>
+            <span className="tape -top-3 left-8" />
+            <div className="flex items-center gap-4">
+              <div className="grid h-20 w-20 shrink-0 place-items-center rounded-2xl text-4xl shadow-paper" style={{ background: "color-mix(in oklab, var(--sage) 60%, white)" }}>
+                🐈
+              </div>
+              <div className="min-w-0">
+                <p className="font-hand text-lg text-muted-foreground">student ID · class of forever</p>
+                <h3 className="truncate font-serif text-2xl">Sora Tanaka</h3>
+                <p className="text-sm text-muted-foreground">designer · maker · daydreamer</p>
+              </div>
+            </div>
+            <dl className="mt-6 grid grid-cols-2 gap-3 text-sm">
+              <Field label="club" value="Coffee & Code" />
+              <Field label="city" value="A small one" />
+              <Field label="weather" value="Always 21°C" />
+              <Field label="now" value="Reading a book" />
+            </dl>
+            <p className="mt-5 font-hand text-lg leading-relaxed">
+              "I like the in-between hours — the soft glow before evening, the hush after rain.
+              Most of my best ideas arrive then."
+            </p>
+          </div>
+
+          {/* Favorites grid */}
+          <div className="paper-card p-6">
+            <div className="flex items-baseline justify-between">
+              <h3 className="font-serif text-2xl">Daily routine</h3>
+              <span className="font-hand text-muted-foreground">~ a typical week ~</span>
+            </div>
+            <div className="mt-6 grid gap-5 sm:grid-cols-2">
+              {favorites.map((f) => (
+                <div key={f.label} className="scribble-border p-4">
+                  <div className="flex items-center gap-2">
+                    <f.icon className="h-5 w-5 text-primary" />
+                    <span className="font-hand text-xl">{f.label}</span>
+                  </div>
+                  <div className="mt-3 h-3 w-full overflow-hidden rounded-full bg-muted">
+                    <div
+                      className="h-full rounded-full transition-all"
+                      style={{
+                        width: `${f.value}%`,
+                        background: "linear-gradient(90deg, color-mix(in oklab, var(--lamp) 70%, white), var(--primary))",
+                      }}
+                    />
+                  </div>
+                  <p className="mt-2 text-xs text-muted-foreground">{f.value}%{f.suffix}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* WORK — polaroid corkboard */}
+      <section id="work" className="relative z-10 mx-auto max-w-6xl px-5 py-16">
+        <SectionTitle kicker="chapter 2" title="Things from the desk" />
+        <p className="mt-2 max-w-xl font-hand text-xl text-muted-foreground">
+          a few projects, scattered like polaroids on a corkboard. hover to tidy them up.
+        </p>
+
+        <div className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+          {projects.map((p) => (
+            <Polaroid key={p.title} {...p} />
+          ))}
+        </div>
+      </section>
+
+      {/* JOURNEY — train route */}
+      <section id="journey" className="relative z-10 mx-auto max-w-6xl px-5 py-16">
+        <SectionTitle kicker="chapter 3" title="The route I've taken" />
+        <p className="mt-2 font-hand text-xl text-muted-foreground">a slow train, with kind stops along the way.</p>
+
+        <div className="paper-card mt-10 overflow-hidden p-6 md:p-10">
+          <div className="relative">
+            {/* track line */}
+            <div className="absolute left-6 top-2 bottom-2 w-[3px] rounded-full md:left-1/2 md:-translate-x-1/2"
+              style={{ background: "repeating-linear-gradient(180deg, var(--primary) 0 10px, transparent 10px 18px)" }}
+            />
+            <ul className="space-y-10">
+              {timeline.map((t, i) => (
+                <li key={t.year} className={`relative grid gap-4 md:grid-cols-2 md:gap-12 ${i % 2 ? "md:[&>*:first-child]:order-2" : ""}`}>
+                  <div className={`pl-16 md:pl-0 ${i % 2 ? "md:text-left md:pl-12" : "md:text-right md:pr-12"}`}>
+                    <p className="font-hand text-2xl text-primary">{t.year}</p>
+                    <h4 className="font-serif text-xl">{t.title}</h4>
+                    <p className="text-muted-foreground">{t.desc}</p>
+                  </div>
+                  {/* stop marker */}
+                  <div className={`relative ${i % 2 ? "md:pr-12 md:text-right" : "md:pl-12"}`}>
+                    <span
+                      className="absolute left-6 top-1 grid h-10 w-10 -translate-x-1/2 place-items-center rounded-full border-2 bg-card shadow-paper md:left-1/2"
+                      style={{ borderColor: "var(--primary)", animation: "gentle-bounce 4s ease-in-out infinite", animationDelay: `${i * 0.3}s` }}
+                    >
+                      <t.icon className="h-5 w-5 text-primary" />
+                    </span>
+                    <div className="pl-16 md:pl-0">
+                      <span className="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1 text-sm">
+                        <Train className="h-4 w-4" /> {t.stop}
+                      </span>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* CONTACT — postcard + letterbox */}
+      <section id="hello" className="relative z-10 mx-auto max-w-6xl px-5 py-16">
+        <SectionTitle kicker="chapter 4" title="Say hello" />
+        <div className="mt-10 grid gap-8 md:grid-cols-[1.1fr_1fr]">
+          <Postcard />
+          <Letterbox />
+        </div>
+      </section>
+
+      <footer className="relative z-10 mx-auto max-w-6xl px-5 py-12 text-center">
+        <p className="font-hand text-xl text-muted-foreground">
+          made with <Heart className="inline h-4 w-4 -translate-y-0.5" /> and a warm cup of something
+        </p>
+        <p className="mt-1 text-xs text-muted-foreground">© {new Date().getFullYear()} my corner. take your time.</p>
+      </footer>
     </div>
+  );
+}
+
+/* ----- small components ----- */
+
+function SectionTitle({ kicker, title }: { kicker: string; title: string }) {
+  return (
+    <div>
+      <p className="font-hand text-xl text-primary">{kicker}</p>
+      <h2 className="mt-1 font-serif text-4xl md:text-5xl">{title}</h2>
+    </div>
+  );
+}
+
+function Field({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-xl border border-border/70 bg-card/60 p-3">
+      <dt className="font-hand text-xs uppercase tracking-widest text-muted-foreground">{label}</dt>
+      <dd className="mt-0.5 font-serif">{value}</dd>
+    </div>
+  );
+}
+
+function CozyButton({
+  href, children, variant = "solid",
+}: { href: string; children: React.ReactNode; variant?: "solid" | "ghost" }) {
+  return (
+    <a
+      href={href}
+      className={[
+        "group inline-flex items-center gap-2 rounded-full px-6 py-3 font-hand text-xl shadow-paper transition-all",
+        "hover:-translate-y-0.5",
+        variant === "solid"
+          ? "bg-primary text-primary-foreground"
+          : "border-2 border-border bg-card text-foreground",
+      ].join(" ")}
+      style={{ borderRadius: "999px 22px 999px 22px / 999px" }}
+      onMouseEnter={(e) => { e.currentTarget.style.animation = "swell 0.5s ease-out forwards"; }}
+      onAnimationEnd={(e) => { e.currentTarget.style.animation = ""; }}
+    >
+      {children}
+      <Sparkles className="h-4 w-4 transition group-hover:rotate-12" />
+    </a>
+  );
+}
+
+function Polaroid({ title, tag, desc, color, rotate, emoji }: {
+  title: string; tag: string; desc: string; color: string; rotate: string; emoji: string;
+}) {
+  return (
+    <div
+      className="paper-card group relative cursor-pointer p-4 transition-all duration-500 hover:rotate-0 hover:-translate-y-2"
+      style={{ transform: `rotate(${rotate})`, background: "var(--card)" }}
+    >
+      <span className="tape -top-3 left-1/2 -translate-x-1/2" />
+      <div
+        className="relative grid aspect-[4/3] place-items-center overflow-hidden rounded-xl text-6xl transition-all duration-500"
+        style={{
+          background: `linear-gradient(135deg, color-mix(in oklab, ${color} 70%, white), color-mix(in oklab, ${color} 30%, white))`,
+          filter: "saturate(0.7) brightness(0.97)",
+        }}
+      >
+        <span
+          className="transition-transform duration-500 group-hover:scale-110"
+          style={{ filter: "drop-shadow(0 6px 10px rgba(0,0,0,0.15))" }}
+        >
+          {emoji}
+        </span>
+        <span
+          className="absolute inset-0 transition-opacity duration-500 opacity-0 group-hover:opacity-100"
+          style={{ background: `linear-gradient(135deg, color-mix(in oklab, ${color} 90%, white), color-mix(in oklab, ${color} 50%, white))` }}
+        />
+      </div>
+      <div className="mt-4 flex items-start justify-between gap-2">
+        <div className="min-w-0">
+          <p className="font-hand text-sm text-muted-foreground">{tag}</p>
+          <h3 className="truncate font-serif text-xl">{title}</h3>
+        </div>
+        <Camera className="h-4 w-4 shrink-0 text-muted-foreground" />
+      </div>
+      <p className="mt-2 text-sm text-muted-foreground">{desc}</p>
+
+      {/* hand-written tag */}
+      <a
+        href="#"
+        className="pointer-events-auto absolute -bottom-4 right-4 hidden rotate-[-6deg] rounded-md px-3 py-1 font-hand text-base shadow-paper group-hover:block"
+        style={{ background: "color-mix(in oklab, var(--lamp) 60%, white)", color: "var(--ink)" }}
+      >
+        Take a Look <ExternalLink className="inline h-3 w-3" />
+      </a>
+    </div>
+  );
+}
+
+function TrainWindow() {
+  return (
+    <div
+      className="paper-card relative overflow-hidden p-3 md:rotate-[2deg]"
+      style={{ background: "var(--card)" }}
+    >
+      <span className="tape -top-3 left-6" />
+      <span className="tape -top-3 right-6" style={{ transform: "rotate(4deg)" }} />
+      <div
+        className="relative aspect-[5/4] overflow-hidden rounded-2xl"
+        style={{
+          background:
+            "linear-gradient(to bottom, color-mix(in oklab, var(--sky-soft) 90%, white) 0%, color-mix(in oklab, var(--lamp) 50%, white) 55%, color-mix(in oklab, var(--sage) 70%, white) 100%)",
+        }}
+      >
+        {/* sun */}
+        <div
+          className="absolute right-8 top-8 h-20 w-20 rounded-full"
+          style={{ background: "color-mix(in oklab, var(--lamp) 80%, white)", animation: "lamp-glow 4s ease-in-out infinite" }}
+        />
+        {/* hills */}
+        <svg viewBox="0 0 400 300" className="absolute inset-x-0 bottom-0 w-full" preserveAspectRatio="none">
+          <path d="M0 220 Q60 170 120 200 T240 200 T400 190 L400 300 L0 300 Z" fill="color-mix(in oklab, var(--sage) 70%, white)" opacity="0.85" />
+          <path d="M0 250 Q80 210 160 240 T320 235 T400 245 L400 300 L0 300 Z" fill="color-mix(in oklab, var(--sage) 90%, var(--ink))" opacity="0.4" />
+        </svg>
+        {/* clouds */}
+        <Cloud className="absolute left-8 top-10 h-10 w-10 text-white/80" style={{ animation: "gentle-bounce 6s ease-in-out infinite" }} />
+        <Cloud className="absolute left-1/3 top-20 h-7 w-7 text-white/70" style={{ animation: "gentle-bounce 7s ease-in-out infinite", animationDelay: "1s" }} />
+        {/* window frame */}
+        <div className="pointer-events-none absolute inset-0 rounded-2xl ring-8 ring-card" />
+        <div className="pointer-events-none absolute inset-0 rounded-2xl" style={{ boxShadow: "inset 0 0 80px rgba(255,220,180,0.4)" }} />
+      </div>
+      <div className="mt-3 flex items-center justify-between px-2 font-hand text-muted-foreground">
+        <span className="inline-flex items-center gap-1"><MapPin className="h-4 w-4" /> somewhere quiet</span>
+        <span>14:27 · clear skies</span>
+      </div>
+    </div>
+  );
+}
+
+function FloatingNotes() {
+  return (
+    <div className="pointer-events-none fixed inset-0 z-0" aria-hidden>
+      {[
+        { left: "8%", top: "70%", delay: 0 },
+        { left: "85%", top: "55%", delay: 3 },
+        { left: "45%", top: "85%", delay: 6 },
+      ].map((n, i) => (
+        <Music
+          key={i}
+          className="absolute h-5 w-5 text-primary/60"
+          style={{ left: n.left, top: n.top, animation: `float-note 9s ease-in ${n.delay}s infinite` }}
+        />
+      ))}
+    </div>
+  );
+}
+
+function Postcard() {
+  return (
+    <div className="paper-card relative overflow-hidden md:rotate-[-1deg]">
+      <div className="grid grid-cols-2 gap-0">
+        <div className="p-6" style={{ background: "color-mix(in oklab, var(--sky-soft) 30%, var(--card))" }}>
+          <p className="font-hand text-2xl">Dear visitor,</p>
+          <p className="mt-3 font-hand text-lg leading-relaxed text-muted-foreground">
+            Thanks for wandering in. If anything here made you smile, write back. I read every letter
+            with a fresh cup of tea, usually on Sunday mornings.
+          </p>
+          <p className="mt-6 font-hand text-xl">— with care, Sora ♡</p>
+        </div>
+        <div className="relative p-6">
+          <div className="absolute right-5 top-5 h-20 w-16 rotate-3 border-2 border-dashed border-border p-1 text-center">
+            <div className="h-full w-full grid place-items-center text-2xl" style={{ background: "color-mix(in oklab, var(--blossom) 50%, white)" }}>
+              🌸
+            </div>
+          </div>
+          <div className="mt-24 space-y-2 font-hand text-lg">
+            <p className="border-b border-dashed border-border pb-1">To: someone kind</p>
+            <p className="border-b border-dashed border-border pb-1">@: hello@mycorner.cafe</p>
+            <p className="border-b border-dashed border-border pb-1">re: a small idea</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Letterbox() {
+  const [sent, setSent] = useState(false);
+  return (
+    <form
+      onSubmit={(e) => { e.preventDefault(); setSent(true); }}
+      className="paper-card p-6 md:rotate-[1deg]"
+    >
+      <div className="mb-5 flex items-center gap-3">
+        <span className="grid h-10 w-10 place-items-center rounded-full bg-primary text-primary-foreground shadow-paper">
+          <Mail className="h-5 w-5" />
+        </span>
+        <h3 className="font-serif text-2xl">Write me a letter</h3>
+      </div>
+      <div className="space-y-5">
+        <RuledField label="your name" placeholder="e.g. wandering stranger" />
+        <RuledField label="how to reach you" type="email" placeholder="you@somewhere.kind" />
+        <RuledTextarea label="message" placeholder="say anything — the weather, an idea, a question…" />
+      </div>
+      <button
+        type="submit"
+        className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 font-hand text-xl text-primary-foreground shadow-paper transition hover:-translate-y-0.5 hover:scale-[1.01]"
+        style={{ borderRadius: "999px 22px 999px 22px / 999px" }}
+      >
+        {sent ? "letter posted ♡" : (<>drop it in the letterbox <Send className="h-4 w-4" /></>)}
+      </button>
+    </form>
+  );
+}
+
+function RuledField({ label, type = "text", placeholder }: { label: string; type?: string; placeholder?: string }) {
+  return (
+    <label className="block">
+      <span className="font-hand text-sm text-muted-foreground">{label}</span>
+      <input
+        type={type}
+        placeholder={placeholder}
+        className="mt-1 w-full border-0 border-b-2 border-dashed border-border bg-transparent px-1 py-2 font-hand text-xl outline-none focus:border-primary"
+      />
+    </label>
+  );
+}
+
+function RuledTextarea({ label, placeholder }: { label: string; placeholder?: string }) {
+  return (
+    <label className="block">
+      <span className="font-hand text-sm text-muted-foreground">{label}</span>
+      <textarea
+        rows={4}
+        placeholder={placeholder}
+        className="mt-1 w-full resize-none bg-transparent px-1 py-2 font-hand text-xl outline-none"
+        style={{
+          backgroundImage: "repeating-linear-gradient(to bottom, transparent 0, transparent 31px, color-mix(in oklab, var(--border) 80%, transparent) 31px, color-mix(in oklab, var(--border) 80%, transparent) 32px)",
+          lineHeight: "32px",
+        }}
+      />
+    </label>
   );
 }
