@@ -251,11 +251,14 @@ function Index() {
         </div>
       </section>
 
-      <footer className="relative z-10 mx-auto max-w-6xl px-5 py-12 text-center">
+      <footer className="relative z-10 mx-auto max-w-6xl px-5 py-12 text-center overflow-hidden">
         <p className="font-hand text-xl text-muted-foreground">
           made with <Heart className="inline h-4 w-4 -translate-y-0.5" /> and a warm cup of something
         </p>
-        <p className="mt-1 text-xs text-muted-foreground">© {new Date().getFullYear()} my corner. take your time.</p>
+        <p className="mt-1 text-xs text-muted-foreground">© {new Date().getFullYear()} my corner. take your time. <span className="ml-2 opacity-70">psst — press <kbd className="rounded border border-border px-1.5 py-0.5 font-hand">m</kbd></span></p>
+        <div className="cat-walker" aria-hidden>
+          <div className="cat-bob text-3xl select-none">🐈</div>
+        </div>
       </footer>
     </div>
   );
