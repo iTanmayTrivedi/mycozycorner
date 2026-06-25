@@ -127,7 +127,7 @@ function Index() {
 
       {/* ABOUT */}
       <section id="about" className="relative z-10 mx-auto max-w-6xl px-5 py-16">
-        <Reveal><SectionTitle kicker="chapter 1" title="A little about me" /></Reveal>
+        <Reveal><SectionTitle kicker="chapter 1" title="A little about me" n="1" /></Reveal>
         <div className="mt-10 grid gap-8 md:grid-cols-[1fr_1.2fr]">
           <Reveal variant="tilt-in">
             <div className="paper-card lift peel relative p-6 md:rotate-[-1.5deg]" style={{ background: "color-mix(in oklab, var(--blossom) 25%, var(--card))" }}>
@@ -175,7 +175,7 @@ function Index() {
 
       {/* WORK */}
       <section id="work" className="relative z-10 mx-auto max-w-6xl px-5 py-16">
-        <Reveal><SectionTitle kicker="chapter 2" title="Things from the desk" /></Reveal>
+        <Reveal><SectionTitle kicker="chapter 2" title="Things from the desk" n="2" /></Reveal>
         <Reveal delay={80}>
           <p className="mt-2 max-w-xl font-hand text-xl text-muted-foreground">
             a few projects, scattered like polaroids on a corkboard. hover to tidy them up.
@@ -202,7 +202,7 @@ function Index() {
 
       {/* JOURNEY */}
       <section id="journey" className="relative z-10 mx-auto max-w-6xl px-5 py-16">
-        <Reveal><SectionTitle kicker="chapter 3" title="The route I've taken" /></Reveal>
+        <Reveal><SectionTitle kicker="chapter 3" title="The route I've taken" n="3" /></Reveal>
         <Reveal delay={80}><p className="mt-2 font-hand text-xl text-muted-foreground">a slow train, with kind stops along the way.</p></Reveal>
 
         <Reveal variant="fade-up" delay={100}>
@@ -244,7 +244,7 @@ function Index() {
 
       {/* CONTACT */}
       <section id="hello" className="relative z-10 mx-auto max-w-6xl px-5 py-16">
-        <Reveal><SectionTitle kicker="chapter 4" title="Say hello" /></Reveal>
+        <Reveal><SectionTitle kicker="chapter 4" title="Say hello" n="4" /></Reveal>
         <div className="mt-10 grid gap-8 md:grid-cols-[1.1fr_1fr]">
           <Reveal variant="slide-right"><Postcard /></Reveal>
           <Reveal variant="slide-left" delay={120}><Letterbox /></Reveal>
