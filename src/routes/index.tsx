@@ -344,44 +344,62 @@ function CozyButton({
 function Polaroid({ title, tag, desc, color, rotate, emoji }: {
   title: string; tag: string; desc: string; color: string; rotate: string; emoji: string;
 }) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = ref.current; if (!el) return;
+    const r = el.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width;
+    const py = (e.clientY - r.top) / r.height;
+    const ry = (px - 0.5) * 14;
+    const rx = (0.5 - py) * 12;
+    el.style.setProperty("--rx", `${rx}deg`);
+    el.style.setProperty("--ry", `${ry}deg`);
+  };
+  const onLeave = () => {
+    const el = ref.current; if (!el) return;
+    el.style.setProperty("--rx", "0deg");
+    el.style.setProperty("--ry", "0deg");
+  };
+
   return (
     <div
-      className="paper-card group relative cursor-pointer p-4 transition-all duration-500 hover:rotate-0 hover:-translate-y-2"
+      ref={ref}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
+      className="polaroid paper-card group relative p-4 hover:rotate-0"
       style={{ transform: `rotate(${rotate})`, background: "var(--card)" }}
     >
       <span className="tape -top-3 left-1/2 -translate-x-1/2" />
       <div
-        className="relative grid aspect-[4/3] place-items-center overflow-hidden rounded-xl text-6xl transition-all duration-500"
+        className="relative grid aspect-[4/3] place-items-center overflow-hidden rounded-xl text-6xl transition-all duration-500 group-hover:saturate-100 group-hover:brightness-105"
         style={{
           background: `linear-gradient(135deg, color-mix(in oklab, ${color} 70%, white), color-mix(in oklab, ${color} 30%, white))`,
-          filter: "saturate(0.7) brightness(0.97)",
+          filter: "saturate(0.65) brightness(0.96)",
         }}
       >
+        {/* shine sweep */}
+        <span className="pointer-events-none absolute -inset-x-1/2 -top-1/2 h-[200%] w-[60%] -translate-x-[120%] rotate-12 bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-0 transition-all duration-700 group-hover:translate-x-[80%] group-hover:opacity-100" />
         <span
-          className="transition-transform duration-500 group-hover:scale-110"
+          className="transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-6"
           style={{ filter: "drop-shadow(0 6px 10px rgba(0,0,0,0.15))" }}
         >
           {emoji}
         </span>
-        <span
-          className="absolute inset-0 transition-opacity duration-500 opacity-0 group-hover:opacity-100"
-          style={{ background: `linear-gradient(135deg, color-mix(in oklab, ${color} 90%, white), color-mix(in oklab, ${color} 50%, white))` }}
-        />
       </div>
       <div className="mt-4 flex items-start justify-between gap-2">
         <div className="min-w-0">
           <p className="font-hand text-sm text-muted-foreground">{tag}</p>
           <h3 className="truncate font-serif text-xl">{title}</h3>
         </div>
-        <Camera className="h-4 w-4 shrink-0 text-muted-foreground" />
+        <Camera className="h-4 w-4 shrink-0 text-muted-foreground transition group-hover:rotate-12 group-hover:text-primary" />
       </div>
       <p className="mt-2 text-sm text-muted-foreground">{desc}</p>
 
-      {/* hand-written tag */}
       <a
         href="#"
-        className="pointer-events-auto absolute -bottom-4 right-4 hidden rotate-[-6deg] rounded-md px-3 py-1 font-hand text-base shadow-paper group-hover:block"
-        style={{ background: "color-mix(in oklab, var(--lamp) 60%, white)", color: "var(--ink)" }}
+        className="pointer-events-auto absolute -bottom-4 right-4 translate-y-2 rotate-[-6deg] rounded-md px-3 py-1 font-hand text-base opacity-0 shadow-paper transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100"
+        style={{ background: "color-mix(in oklab, var(--lamp) 60%, white)", color: "var(--ink)", animation: "shimmer-tag 2.4s ease-in-out infinite" }}
       >
         Take a Look <ExternalLink className="inline h-3 w-3" />
       </a>
