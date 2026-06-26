@@ -386,12 +386,16 @@ function CozyButton({
     const el = ref.current; if (!el) return;
     el.style.transform = "";
   };
+  const onClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    petalBurst(e.clientX, e.clientY, 12);
+  };
   return (
     <a
       ref={ref}
       href={href}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
+      onClick={onClick}
       className={[
         "magnetic group inline-flex items-center gap-2 rounded-full px-6 py-3 font-hand text-xl shadow-paper",
         "transition-transform duration-300 ease-out will-change-transform",
@@ -404,6 +408,18 @@ function CozyButton({
       {children}
       <Sparkles className="h-4 w-4 transition group-hover:rotate-180 group-hover:scale-125 duration-500" />
     </a>
+  );
+}
+
+function MagneticLetters({ text }: { text: string }) {
+  return (
+    <span aria-label={text}>
+      {text.split("").map((ch, i) => (
+        <span key={i} className="mag-letter" aria-hidden style={{ transitionDelay: `${i * 12}ms` }}>
+          {ch === " " ? "\u00A0" : ch}
+        </span>
+      ))}
+    </span>
   );
 }
 
