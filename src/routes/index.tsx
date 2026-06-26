@@ -120,6 +120,12 @@ const favorites = [
 
 function Index() {
   useParallax();
+  const [openProject, setOpenProject] = useState<ProjectDetail | null>(null);
+  const [originRect, setOriginRect] = useState<DOMRect | null>(null);
+  const openProjectAt = (p: ProjectDetail, rect: DOMRect) => {
+    setOriginRect(rect);
+    setOpenProject(p);
+  };
   return (
     <div className="relative min-h-screen text-foreground">
       <LoadingScreen />
