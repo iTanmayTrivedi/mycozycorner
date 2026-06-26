@@ -15,6 +15,11 @@ import { ScrollProgress } from "@/components/cozy/ScrollProgress";
 import { PaperPlane } from "@/components/cozy/PaperPlane";
 import { TeacupGauge } from "@/components/cozy/TeacupGauge";
 import { MeowEgg } from "@/components/cozy/MeowEgg";
+import { VinylPlayer } from "@/components/cozy/VinylPlayer";
+import { BlossomBranch } from "@/components/cozy/BlossomBranch";
+import { ShootingStar } from "@/components/cozy/ShootingStar";
+import { WavyDivider } from "@/components/cozy/WavyDivider";
+import { petalBurst } from "@/components/cozy/confetti";
 
 
 export const Route = createFileRoute("/")({
@@ -65,6 +70,17 @@ function Index() {
       <PaperPlane />
       <TeacupGauge />
       <MeowEgg />
+      <BlossomBranch />
+      <ShootingStar />
+      <VinylPlayer />
+      <button
+        type="button"
+        className="ribbon"
+        onClick={() => document.getElementById("hello")?.scrollIntoView({ behavior: "smooth" })}
+        aria-label="jump to contact"
+      >
+        ✿ say hi →
+      </button>
 
 
       {/* Nav */}
@@ -95,7 +111,7 @@ function Index() {
           <Reveal variant="slide-right">
             <p className="font-hand text-2xl text-muted-foreground">~ a quiet portfolio ~</p>
             <h1 className="mt-3 font-serif text-5xl leading-[1.05] md:text-7xl">
-              Welcome to <span className="ink-underline">My Corner</span>
+              Welcome to <span className="ink-underline"><MagneticLetters text="My Corner" /></span>
             </h1>
             <p className="mt-6 max-w-md text-lg text-muted-foreground">
               Pull up a chair. The kettle's on. I make small, careful things on the internet —
@@ -118,12 +134,14 @@ function Index() {
       </section>
 
       {/* MARQUEE — drifts with scroll */}
+      <WavyDivider from="transparent" to="color-mix(in oklab, var(--blossom) 30%, transparent)" variant="wave" height={70} />
       <div className="relative z-10 py-4" style={{ background: "color-mix(in oklab, var(--blossom) 30%, transparent)" }}>
         <ScrollMarquee
           items={["slow mornings", "warm tea", "soft pixels", "kind code", "quiet pages", "long walks"]}
           direction="left"
         />
       </div>
+      <WavyDivider from="color-mix(in oklab, var(--blossom) 30%, transparent)" to="transparent" variant="wave" height={70} flip />
 
       {/* ABOUT */}
       <section id="about" className="relative z-10 mx-auto max-w-6xl px-5 py-16">
@@ -192,6 +210,7 @@ function Index() {
       </section>
 
       {/* MARQUEE — reverse direction, sage band */}
+      <WavyDivider from="transparent" to="color-mix(in oklab, var(--sage) 35%, transparent)" variant="torn" height={60} />
       <div className="relative z-10 py-4" style={{ background: "color-mix(in oklab, var(--sage) 35%, transparent)" }}>
         <ScrollMarquee
           items={["design", "code", "music", "tea", "books", "naps", "rain"]}
@@ -199,6 +218,7 @@ function Index() {
           tilt={10}
         />
       </div>
+      <WavyDivider from="color-mix(in oklab, var(--sage) 35%, transparent)" to="transparent" variant="torn" height={60} flip />
 
       {/* JOURNEY */}
       <section id="journey" className="relative z-10 mx-auto max-w-6xl px-5 py-16">
@@ -370,12 +390,16 @@ function CozyButton({
     const el = ref.current; if (!el) return;
     el.style.transform = "";
   };
+  const onClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    petalBurst(e.clientX, e.clientY, 12);
+  };
   return (
     <a
       ref={ref}
       href={href}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
+      onClick={onClick}
       className={[
         "magnetic group inline-flex items-center gap-2 rounded-full px-6 py-3 font-hand text-xl shadow-paper",
         "transition-transform duration-300 ease-out will-change-transform",
@@ -388,6 +412,18 @@ function CozyButton({
       {children}
       <Sparkles className="h-4 w-4 transition group-hover:rotate-180 group-hover:scale-125 duration-500" />
     </a>
+  );
+}
+
+function MagneticLetters({ text }: { text: string }) {
+  return (
+    <span aria-label={text}>
+      {text.split("").map((ch, i) => (
+        <span key={i} className="mag-letter" aria-hidden style={{ transitionDelay: `${i * 12}ms` }}>
+          {ch === " " ? "\u00A0" : ch}
+        </span>
+      ))}
+    </span>
   );
 }
 
