@@ -20,6 +20,7 @@ import { BlossomBranch } from "@/components/cozy/BlossomBranch";
 import { ShootingStar } from "@/components/cozy/ShootingStar";
 import { WavyDivider } from "@/components/cozy/WavyDivider";
 import { petalBurst } from "@/components/cozy/confetti";
+import { ProjectModal, type ProjectDetail } from "@/components/cozy/ProjectModal";
 
 
 export const Route = createFileRoute("/")({
