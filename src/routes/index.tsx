@@ -35,13 +35,73 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const projects = [
-  { title: "Café Loop", tag: "Web App", desc: "A daily-journaling app that feels like a paper notebook.", color: "var(--blossom)", rotate: "-3deg", emoji: "📓" },
-  { title: "Lo-fi Garden", tag: "Music Player", desc: "A tiny browser radio that grows plants while you listen.", color: "var(--sage)", rotate: "2deg", emoji: "🌱" },
-  { title: "Train Window", tag: "Generative Art", desc: "Scenery that scrolls by, gently, while you think.", color: "var(--sky-soft)", rotate: "-1deg", emoji: "🚃" },
-  { title: "Pen Pal", tag: "iOS Concept", desc: "Slow messaging — letters that arrive tomorrow.", color: "var(--lamp)", rotate: "4deg", emoji: "✉️" },
-  { title: "Kotatsu Kit", tag: "Design System", desc: "Warm, soft tokens for cozy product interfaces.", color: "var(--blossom)", rotate: "1deg", emoji: "🍵" },
-  { title: "Sunbeam", tag: "CLI Tool", desc: "Tiny terminal companion that wishes you a good morning.", color: "var(--sage)", rotate: "-2deg", emoji: "☀️" },
+const projects: ProjectDetail[] = [
+  {
+    title: "Café Loop", tag: "Web App", desc: "A daily-journaling app that feels like a paper notebook.",
+    color: "var(--blossom)", rotate: "-3deg", emoji: "📓",
+    longDesc: "A daily-journaling app that feels like a paper notebook — soft pages, ink that dries, and a quiet reminder each evening to write just one line.",
+    stack: ["React", "TypeScript", "IndexedDB", "Framer Motion"],
+    shots: [
+      { emoji: "📓", color: "var(--blossom)", caption: "Today's page" },
+      { emoji: "✒️", color: "var(--lamp)", caption: "Ink that dries" },
+      { emoji: "🌙", color: "var(--sky-soft)", caption: "Evening prompt" },
+    ],
+  },
+  {
+    title: "Lo-fi Garden", tag: "Music Player", desc: "A tiny browser radio that grows plants while you listen.",
+    color: "var(--sage)", rotate: "2deg", emoji: "🌱",
+    longDesc: "A tiny browser radio. Every minute of listening waters a little plant on your desk — by the end of the week, you've grown a garden of focus.",
+    stack: ["Web Audio", "Canvas", "SVG", "PWA"],
+    shots: [
+      { emoji: "🌱", color: "var(--sage)", caption: "Sprout" },
+      { emoji: "🎧", color: "var(--sky-soft)", caption: "Lo-fi player" },
+      { emoji: "🪴", color: "var(--sage)", caption: "Your garden" },
+    ],
+  },
+  {
+    title: "Train Window", tag: "Generative Art", desc: "Scenery that scrolls by, gently, while you think.",
+    color: "var(--sky-soft)", rotate: "-1deg", emoji: "🚃",
+    longDesc: "Procedural scenery that drifts past at the speed of a country train. Soft hills, paper clouds, and the occasional shrine — all generated, never the same twice.",
+    stack: ["WebGL", "Perlin Noise", "GLSL"],
+    shots: [
+      { emoji: "🚃", color: "var(--sky-soft)", caption: "Leaving the station" },
+      { emoji: "⛰️", color: "var(--sage)", caption: "Rolling hills" },
+      { emoji: "⛩️", color: "var(--blossom)", caption: "Passing shrine" },
+    ],
+  },
+  {
+    title: "Pen Pal", tag: "iOS Concept", desc: "Slow messaging — letters that arrive tomorrow.",
+    color: "var(--lamp)", rotate: "4deg", emoji: "✉️",
+    longDesc: "Slow messaging, on purpose. Letters take a day to travel. You write longer, you read carefully, and you wait — like the mail used to feel.",
+    stack: ["SwiftUI", "CloudKit", "Figma"],
+    shots: [
+      { emoji: "✉️", color: "var(--lamp)", caption: "Compose a letter" },
+      { emoji: "📮", color: "var(--blossom)", caption: "In transit" },
+      { emoji: "📬", color: "var(--sage)", caption: "Tomorrow's mail" },
+    ],
+  },
+  {
+    title: "Kotatsu Kit", tag: "Design System", desc: "Warm, soft tokens for cozy product interfaces.",
+    color: "var(--blossom)", rotate: "1deg", emoji: "🍵",
+    longDesc: "A small design system of warm tokens, gentle shadows, and hand-drawn components — for teams who want their product to feel like a cup of tea.",
+    stack: ["Tokens", "Tailwind", "Storybook"],
+    shots: [
+      { emoji: "🍵", color: "var(--blossom)", caption: "Tokens" },
+      { emoji: "🎨", color: "var(--lamp)", caption: "Palette" },
+      { emoji: "🧶", color: "var(--sage)", caption: "Components" },
+    ],
+  },
+  {
+    title: "Sunbeam", tag: "CLI Tool", desc: "Tiny terminal companion that wishes you a good morning.",
+    color: "var(--sage)", rotate: "-2deg", emoji: "☀️",
+    longDesc: "Open the terminal, get a warm hello. Sunbeam greets you with the weather, your three small tasks, and a haiku someone wrote last night.",
+    stack: ["Rust", "Ratatui"],
+    shots: [
+      { emoji: "☀️", color: "var(--lamp)", caption: "Good morning" },
+      { emoji: "📝", color: "var(--sky-soft)", caption: "Three tasks" },
+      { emoji: "🍃", color: "var(--sage)", caption: "Today's haiku" },
+    ],
+  },
 ];
 
 const timeline = [
