@@ -70,6 +70,17 @@ function Index() {
       <PaperPlane />
       <TeacupGauge />
       <MeowEgg />
+      <BlossomBranch />
+      <ShootingStar />
+      <VinylPlayer />
+      <button
+        type="button"
+        className="ribbon"
+        onClick={() => document.getElementById("hello")?.scrollIntoView({ behavior: "smooth" })}
+        aria-label="jump to contact"
+      >
+        ✿ say hi →
+      </button>
 
 
       {/* Nav */}
