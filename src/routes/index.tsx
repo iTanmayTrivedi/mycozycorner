@@ -347,6 +347,12 @@ function Index() {
           <div className="cat-bob text-3xl select-none">🐈</div>
         </div>
       </footer>
+
+      <ProjectModal
+        project={openProject}
+        originRect={originRect}
+        onClose={() => setOpenProject(null)}
+      />
     </div>
   );
 }
