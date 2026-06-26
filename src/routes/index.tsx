@@ -15,6 +15,11 @@ import { ScrollProgress } from "@/components/cozy/ScrollProgress";
 import { PaperPlane } from "@/components/cozy/PaperPlane";
 import { TeacupGauge } from "@/components/cozy/TeacupGauge";
 import { MeowEgg } from "@/components/cozy/MeowEgg";
+import { VinylPlayer } from "@/components/cozy/VinylPlayer";
+import { BlossomBranch } from "@/components/cozy/BlossomBranch";
+import { ShootingStar } from "@/components/cozy/ShootingStar";
+import { WavyDivider } from "@/components/cozy/WavyDivider";
+import { petalBurst } from "@/components/cozy/confetti";
 
 
 export const Route = createFileRoute("/")({
