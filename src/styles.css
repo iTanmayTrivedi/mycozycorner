@@ -601,9 +601,245 @@ section { content-visibility: auto; contain-intrinsic-size: 1px 800px; }
   animation: stamp-in 0.7s cubic-bezier(0.22, 1.4, 0.36, 1) both;
 }
 
+/* ===== Vinyl Player (fixed bottom-left) ===== */
+.vinyl-player {
+  position: fixed;
+  left: 18px;
+  bottom: 18px;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px 8px 8px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--card) 85%, transparent);
+  backdrop-filter: blur(8px);
+  border: 1px solid color-mix(in oklab, var(--border) 80%, transparent);
+  box-shadow: 0 10px 30px -16px rgba(30,41,59,0.35);
+  font-family: var(--font-hand);
+  max-width: 280px;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease;
+}
+.vinyl-player:hover { transform: translateY(-3px); box-shadow: 0 18px 36px -16px rgba(30,41,59,0.45); }
+.vinyl-disc-wrap {
+  position: relative;
+  width: 44px; height: 44px;
+  border-radius: 999px;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  padding: 0;
+}
+.vinyl-disc {
+  position: absolute; inset: 0;
+  border-radius: 999px;
+  background:
+    repeating-radial-gradient(circle at 50% 50%, oklch(0.22 0.02 270) 0 2px, oklch(0.28 0.03 270) 2px 3px);
+  box-shadow: inset 0 0 8px rgba(0,0,0,0.6), 0 4px 10px rgba(0,0,0,0.25);
+  display: grid; place-items: center;
+}
+.vinyl-disc.spinning { animation: vinyl-spin 4s linear infinite; }
+.vinyl-shine {
+  position: absolute; inset: 4px;
+  border-radius: 999px;
+  background: conic-gradient(from 0deg, transparent 0deg, color-mix(in oklab, white 30%, transparent) 40deg, transparent 80deg, transparent 360deg);
+  opacity: 0.4;
+}
+.vinyl-label {
+  position: relative;
+  width: 18px; height: 18px;
+  border-radius: 999px;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  display: grid; place-items: center;
+}
+.vinyl-toggle {
+  position: absolute;
+  right: -4px; bottom: -2px;
+  width: 18px; height: 18px;
+  border-radius: 999px;
+  background: var(--lamp);
+  color: var(--ink);
+  display: grid; place-items: center;
+  border: 2px solid var(--card);
+}
+.vinyl-track {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  text-align: left;
+  min-width: 0;
+  color: inherit;
+}
+.vinyl-track-kicker {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted-foreground);
+  font-family: var(--font-sans);
+}
+.vinyl-track-title {
+  font-size: 1.05rem;
+  line-height: 1.1;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.vinyl-bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 10px;
+  margin-top: 2px;
+}
+.vinyl-bars i {
+  display: inline-block;
+  width: 3px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, var(--lamp), var(--primary));
+  animation: vinyl-bar 0.9s ease-in-out infinite;
+}
+@keyframes vinyl-spin { to { transform: rotate(360deg); } }
+@keyframes vinyl-bar {
+  0%, 100% { height: 3px; }
+  50%      { height: 10px; }
+}
+
+/* ===== Blossom branch (top-right decorative) ===== */
+.blossom-branch {
+  position: fixed;
+  top: -20px;
+  right: -30px;
+  width: 280px;
+  height: 240px;
+  pointer-events: none;
+  z-index: 4;
+  opacity: 0.95;
+  filter: drop-shadow(0 8px 14px rgba(30,41,59,0.12));
+}
+.blossom-branch .branch-sway {
+  transform-origin: 100% 0%;
+  transform: rotate(calc(var(--sway, 0deg) + var(--bend, 0deg)));
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  animation: branch-idle 7s ease-in-out infinite;
+}
+@keyframes branch-idle {
+  0%, 100% { transform: rotate(calc(var(--sway, 0deg) + var(--bend, 0deg) - 1.5deg)); }
+  50%      { transform: rotate(calc(var(--sway, 0deg) + var(--bend, 0deg) + 1.5deg)); }
+}
+@keyframes bloom-puff {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.08); }
+}
+
+/* ===== Shooting star ===== */
+.shooting-star {
+  position: absolute;
+  top: 10vh;
+  left: -10vw;
+  width: 140px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--lamp) 90%, white), transparent);
+  filter: drop-shadow(0 0 6px color-mix(in oklab, var(--lamp) 80%, transparent));
+  animation: shoot 1.4s ease-out forwards;
+  transform: rotate(18deg);
+  opacity: 0;
+}
+@keyframes shoot {
+  0%   { transform: translate(0, 0) rotate(18deg); opacity: 0; }
+  20%  { opacity: 1; }
+  100% { transform: translate(120vw, 40vh) rotate(18deg); opacity: 0; }
+}
+
+/* ===== Click petal burst ===== */
+.petal-burst-piece {
+  position: fixed;
+  pointer-events: none;
+  font-size: 18px;
+  line-height: 1;
+  transform: translate(-50%, -50%);
+  animation: petal-pop 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  will-change: transform, opacity;
+}
+@keyframes petal-pop {
+  0%   { transform: translate(-50%, -50%) scale(0.4) rotate(0); opacity: 0; }
+  15%  { opacity: 1; }
+  100% { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1) rotate(var(--rot)); opacity: 0; }
+}
+
+/* ===== Bookmark ribbon (side) ===== */
+.ribbon {
+  position: fixed;
+  left: 0;
+  top: 28%;
+  z-index: 30;
+  padding: 10px 18px 10px 14px;
+  font-family: var(--font-hand);
+  font-size: 1.05rem;
+  color: var(--primary-foreground);
+  background: linear-gradient(135deg, var(--primary), color-mix(in oklab, var(--primary) 60%, var(--lamp)));
+  border-radius: 0 12px 12px 0;
+  box-shadow: 0 8px 18px -10px rgba(30,41,59,0.4);
+  transform: translateX(-72%);
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  cursor: pointer;
+  border: 0;
+}
+.ribbon::after {
+  content: "";
+  position: absolute;
+  right: -10px; top: 0; bottom: 0;
+  width: 10px;
+  background: inherit;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+.ribbon:hover { transform: translateX(0); }
+
+/* ===== Polaroid scroll sway ===== */
+@supports (animation-timeline: view()) {
+  .sd-sway {
+    animation: sd-sway linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 80%;
+  }
+}
+@keyframes sd-sway {
+  0%   { transform: translateY(40px) rotate(-3deg); }
+  50%  { transform: translateY(0) rotate(1deg); }
+  100% { transform: translateY(-20px) rotate(-1deg); }
+}
+
+/* ===== Nav link micro-glow ===== */
+.cozy-link {
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+.cozy-link:hover {
+  color: var(--primary);
+  text-shadow: 0 0 16px color-mix(in oklab, var(--primary) 35%, transparent);
+}
+
+/* ===== Hero magnetic letters ===== */
+.mag-letter {
+  display: inline-block;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), color 0.25s ease;
+  will-change: transform;
+}
+.mag-letter:hover {
+  color: var(--primary);
+  transform: translateY(-6px) rotate(-4deg) scale(1.12);
+}
+.magnetic:active { transform: scale(0.96) !important; }
+
 /* ===== Reduce motion safety ===== */
 @media (prefers-reduced-motion: reduce) {
-  .paper-plane, .paper-plane-trail, .cat-walker, .teacup-fill, .sd-rotate-on-scroll {
+  .paper-plane, .paper-plane-trail, .cat-walker, .teacup-fill,
+  .sd-rotate-on-scroll, .vinyl-disc.spinning, .vinyl-bars i,
+  .blossom-branch .branch-sway, .shooting-star, .petal-burst-piece {
     animation: none !important;
     transition: none !important;
   }
