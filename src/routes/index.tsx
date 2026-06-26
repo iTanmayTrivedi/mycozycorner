@@ -517,12 +517,26 @@ function Polaroid({ project, onOpen }: { project: ProjectDetail; onOpen: (p: Pro
     el.style.setProperty("--ry", "0deg");
   };
 
+  const handleOpen = () => {
+    const el = ref.current; if (!el) return;
+    // reset tilt so the rect we capture is the resting position
+    el.style.setProperty("--rx", "0deg");
+    el.style.setProperty("--ry", "0deg");
+    const r = el.getBoundingClientRect();
+    onOpen(project, r);
+  };
+
   return (
     <div
       ref={ref}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
-      className="polaroid paper-card peel group relative p-4 hover:rotate-0"
+      onClick={handleOpen}
+      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); handleOpen(); } }}
+      role="button"
+      tabIndex={0}
+      aria-label={`open ${title} project`}
+      className="polaroid paper-card peel group relative cursor-pointer p-4 hover:rotate-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
       style={{ transform: `rotate(${rotate})`, background: "var(--card)" }}
     >
       <span className="tape -top-3 left-1/2 -translate-x-1/2" />
@@ -551,13 +565,12 @@ function Polaroid({ project, onOpen }: { project: ProjectDetail; onOpen: (p: Pro
       </div>
       <p className="mt-2 text-sm text-muted-foreground">{desc}</p>
 
-      <a
-        href="#"
-        className="pointer-events-auto absolute -bottom-4 right-4 translate-y-2 rotate-[-6deg] rounded-md px-3 py-1 font-hand text-base opacity-0 shadow-paper transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100"
+      <span
+        className="pointer-events-none absolute -bottom-4 right-4 translate-y-2 rotate-[-6deg] rounded-md px-3 py-1 font-hand text-base opacity-0 shadow-paper transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100"
         style={{ background: "color-mix(in oklab, var(--lamp) 60%, white)", color: "var(--ink)", animation: "shimmer-tag 2.4s ease-in-out infinite" }}
       >
         Take a Look <ExternalLink className="inline h-3 w-3" />
-      </a>
+      </span>
     </div>
   );
 }
