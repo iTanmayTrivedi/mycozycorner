@@ -134,12 +134,14 @@ function Index() {
       </section>
 
       {/* MARQUEE — drifts with scroll */}
+      <WavyDivider from="transparent" to="color-mix(in oklab, var(--blossom) 30%, transparent)" variant="wave" height={70} />
       <div className="relative z-10 py-4" style={{ background: "color-mix(in oklab, var(--blossom) 30%, transparent)" }}>
         <ScrollMarquee
           items={["slow mornings", "warm tea", "soft pixels", "kind code", "quiet pages", "long walks"]}
           direction="left"
         />
       </div>
+      <WavyDivider from="color-mix(in oklab, var(--blossom) 30%, transparent)" to="transparent" variant="wave" height={70} flip />
 
       {/* ABOUT */}
       <section id="about" className="relative z-10 mx-auto max-w-6xl px-5 py-16">
