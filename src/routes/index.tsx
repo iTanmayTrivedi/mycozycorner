@@ -111,7 +111,7 @@ function Index() {
           <Reveal variant="slide-right">
             <p className="font-hand text-2xl text-muted-foreground">~ a quiet portfolio ~</p>
             <h1 className="mt-3 font-serif text-5xl leading-[1.05] md:text-7xl">
-              Welcome to <span className="ink-underline">My Corner</span>
+              Welcome to <span className="ink-underline"><MagneticLetters text="My Corner" /></span>
             </h1>
             <p className="mt-6 max-w-md text-lg text-muted-foreground">
               Pull up a chair. The kettle's on. I make small, careful things on the internet —
