@@ -495,9 +495,8 @@ function MagneticLetters({ text }: { text: string }) {
 }
 
 
-function Polaroid({ title, tag, desc, color, rotate, emoji }: {
-  title: string; tag: string; desc: string; color: string; rotate: string; emoji: string;
-}) {
+function Polaroid({ project, onOpen }: { project: ProjectDetail; onOpen: (p: ProjectDetail, rect: DOMRect) => void }) {
+  const { title, tag, desc, color, rotate, emoji } = project;
   const ref = useRef<HTMLDivElement>(null);
 
   const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
