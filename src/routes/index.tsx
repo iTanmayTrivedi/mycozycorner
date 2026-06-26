@@ -210,6 +210,7 @@ function Index() {
       </section>
 
       {/* MARQUEE — reverse direction, sage band */}
+      <WavyDivider from="transparent" to="color-mix(in oklab, var(--sage) 35%, transparent)" variant="torn" height={60} />
       <div className="relative z-10 py-4" style={{ background: "color-mix(in oklab, var(--sage) 35%, transparent)" }}>
         <ScrollMarquee
           items={["design", "code", "music", "tea", "books", "naps", "rain"]}
@@ -217,6 +218,7 @@ function Index() {
           tilt={10}
         />
       </div>
+      <WavyDivider from="color-mix(in oklab, var(--sage) 35%, transparent)" to="transparent" variant="torn" height={60} flip />
 
       {/* JOURNEY */}
       <section id="journey" className="relative z-10 mx-auto max-w-6xl px-5 py-16">
