@@ -844,3 +844,200 @@ section { content-visibility: auto; contain-intrinsic-size: 1px 800px; }
     transition: none !important;
   }
 }
+
+/* ===== Cursor lantern — soft warm spotlight that follows mouse ===== */
+.cursor-lantern {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background: radial-gradient(
+    360px circle at var(--lx, 50%) var(--ly, 50%),
+    color-mix(in oklab, var(--lamp) 22%, transparent) 0%,
+    color-mix(in oklab, var(--blossom) 10%, transparent) 30%,
+    transparent 65%
+  );
+  mix-blend-mode: soft-light;
+  transition: opacity 0.4s ease;
+}
+.dark .cursor-lantern {
+  background: radial-gradient(
+    320px circle at var(--lx, 50%) var(--ly, 50%),
+    color-mix(in oklab, var(--lamp) 35%, transparent) 0%,
+    color-mix(in oklab, var(--primary) 18%, transparent) 30%,
+    transparent 70%
+  );
+  mix-blend-mode: screen;
+}
+
+/* ===== Paper grain texture overlay ===== */
+.paper-grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.18;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.15  0 0 0 0 0.12  0 0 0 0 0.1  0 0 0 0.5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  background-size: 160px 160px;
+}
+.dark .paper-grain { opacity: 0.12; mix-blend-mode: overlay; }
+
+/* ===== Polaroid breathing idle ===== */
+@keyframes polaroid-breathe {
+  0%, 100% { transform: translateY(0) rotate(var(--idle-r, 0deg)); }
+  50%      { transform: translateY(-4px) rotate(calc(var(--idle-r, 0deg) + 0.6deg)); }
+}
+.polaroid:not(:hover) {
+  animation: polaroid-breathe 6s ease-in-out infinite;
+}
+
+/* ===== Cat speech bubble ===== */
+.cat-walker-button {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+.cat-bubble {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translate(-50%, -8px);
+  padding: 6px 12px;
+  border-radius: 14px;
+  background: var(--card);
+  color: var(--foreground);
+  border: 1px solid color-mix(in oklab, var(--border) 80%, transparent);
+  font-family: var(--font-hand);
+  font-size: 1rem;
+  white-space: nowrap;
+  box-shadow: 0 8px 18px -8px rgba(30,41,59,0.25);
+  animation: cat-bubble-in 0.3s cubic-bezier(0.22, 1.4, 0.36, 1) both;
+}
+.cat-bubble::after {
+  content: "";
+  position: absolute;
+  left: 50%; bottom: -6px;
+  width: 10px; height: 10px;
+  transform: translateX(-50%) rotate(45deg);
+  background: var(--card);
+  border-right: 1px solid color-mix(in oklab, var(--border) 80%, transparent);
+  border-bottom: 1px solid color-mix(in oklab, var(--border) 80%, transparent);
+}
+@keyframes cat-bubble-in {
+  from { opacity: 0; transform: translate(-50%, 0) scale(0.7); }
+  to   { opacity: 1; transform: translate(-50%, -8px) scale(1); }
+}
+
+/* ===== Train window cinematic parallax (scroll + cursor) ===== */
+.train-window { perspective: 1200px; }
+.train-window > div:first-of-type ~ div:not(.tw-rain) { /* noop selector guard */ }
+.tw-sun {
+  transform: translate(
+    calc(var(--mx-tw, 0) * -8px),
+    calc(var(--tw, 0) * -40px + var(--my-tw, 0) * -8px)
+  );
+  transition: transform 0.2s linear;
+}
+.tw-hills-1 {
+  transform: translateX(calc(var(--mx-tw, 0) * 12px + var(--tw, 0) * 10px));
+  transition: transform 0.2s linear;
+}
+.tw-hills-2 {
+  transform: translateX(calc(var(--mx-tw, 0) * -16px + var(--tw, 0) * -14px));
+  transition: transform 0.2s linear;
+}
+.tw-cloud-1 {
+  transform: translateX(calc(var(--tw, 0) * -30px + var(--mx-tw, 0) * 14px));
+  animation: gentle-bounce 6s ease-in-out infinite;
+}
+.tw-cloud-2 {
+  transform: translateX(calc(var(--tw, 0) * -50px + var(--mx-tw, 0) * 20px));
+  animation: gentle-bounce 7s ease-in-out infinite;
+  animation-delay: 1s;
+}
+.tw-torii {
+  right: -60px; bottom: 28%;
+  width: 48px; height: 48px;
+  transform: translateX(calc(var(--tw, 0) * -260px));
+  transition: transform 0.25s linear;
+  opacity: 0.85;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15));
+}
+.tw-reflect {
+  background: linear-gradient(115deg, transparent 30%, color-mix(in oklab, white 30%, transparent) 50%, transparent 70%);
+  transform: translateX(calc(var(--mx-tw, 0) * 40px));
+  opacity: 0.35;
+  border-radius: inherit;
+}
+
+/* rain on hover */
+.tw-rain { opacity: 0; transition: opacity 0.4s ease; }
+.train-window:hover .tw-rain { opacity: 0.6; }
+.tw-rain span {
+  position: absolute;
+  top: -10%;
+  width: 1px; height: 20px;
+  background: linear-gradient(to bottom, transparent, color-mix(in oklab, var(--sky-soft) 80%, white));
+  animation: rain-fall 0.9s linear infinite;
+}
+@keyframes rain-fall {
+  from { transform: translateY(-20px); }
+  to   { transform: translateY(120%); }
+}
+
+/* ===== Cozy button: click ripple via active state ===== */
+.magnetic::after {
+  content: "";
+  position: absolute;
+  left: var(--mx, 50%); top: var(--my, 50%);
+  width: 6px; height: 6px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--lamp) 80%, white);
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0.7;
+  pointer-events: none;
+  z-index: -1;
+  transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+}
+.magnetic:active::after {
+  transform: translate(-50%, -50%) scale(40);
+  opacity: 0;
+  transition: transform 0.7s ease-out, opacity 0.7s ease-out;
+}
+
+/* ===== Idle chapter sticker pulse ===== */
+.chapter-sticker {
+  animation: sticker-pulse 4s ease-in-out infinite;
+}
+@keyframes sticker-pulse {
+  0%, 100% { box-shadow: 0 6px 14px -6px rgba(30,41,59,0.3), inset 0 -3px 0 rgba(0,0,0,0.06), 0 0 0 0 color-mix(in oklab, var(--lamp) 50%, transparent); }
+  50%      { box-shadow: 0 6px 14px -6px rgba(30,41,59,0.3), inset 0 -3px 0 rgba(0,0,0,0.06), 0 0 0 12px transparent; }
+}
+
+/* ===== Postcard stamp hover: cancel-mark sweep ===== */
+.stamp { position: relative; cursor: pointer; }
+.stamp::after {
+  content: "";
+  position: absolute; inset: -8px;
+  border: 2px solid color-mix(in oklab, var(--primary) 70%, transparent);
+  border-radius: 50%;
+  opacity: 0;
+  transform: rotate(-18deg) scale(0.7);
+  transition: opacity 0.3s ease, transform 0.5s cubic-bezier(0.22, 1.4, 0.36, 1);
+}
+.stamp:hover::after { opacity: 0.9; transform: rotate(-12deg) scale(1); }
+
+/* keep cursor lantern below custom cursor & UI */
+.cozy-dot, .cozy-ring, .cozy-trail { z-index: 9999; }
+
+@media (prefers-reduced-motion: reduce) {
+  .polaroid:not(:hover), .chapter-sticker, .tw-rain span, .tw-sun, .tw-hills-1, .tw-hills-2, .tw-torii, .tw-cloud-1, .tw-cloud-2 {
+    animation: none !important;
+    transition: none !important;
+  }
+  .cursor-lantern { display: none; }
+}
