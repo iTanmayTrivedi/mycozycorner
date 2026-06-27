@@ -21,6 +21,8 @@ import { ShootingStar } from "@/components/cozy/ShootingStar";
 import { WavyDivider } from "@/components/cozy/WavyDivider";
 import { petalBurst } from "@/components/cozy/confetti";
 import { ProjectModal, type ProjectDetail } from "@/components/cozy/ProjectModal";
+import { CursorLantern } from "@/components/cozy/CursorLantern";
+import { CatBubble } from "@/components/cozy/CatBubble";
 
 
 export const Route = createFileRoute("/")({
@@ -130,7 +132,9 @@ function Index() {
     <div className="relative min-h-screen text-foreground">
       <LoadingScreen />
       <ScrollProgress />
+      <CursorLantern />
       <CustomCursor />
+      <div className="paper-grain" aria-hidden />
       <Petals />
       <FloatingNotes />
       <SunbeamLayer />
@@ -343,9 +347,7 @@ function Index() {
           made with <Heart className="inline h-4 w-4 -translate-y-0.5" /> and a warm cup of something
         </p>
         <p className="mt-1 text-xs text-muted-foreground">© {new Date().getFullYear()} my corner. take your time. <span className="ml-2 opacity-70">psst — press <kbd className="rounded border border-border px-1.5 py-0.5 font-hand">m</kbd></span></p>
-        <div className="cat-walker" aria-hidden>
-          <div className="cat-bob text-3xl select-none">🐈</div>
-        </div>
+        <CatBubble />
       </footer>
 
       <ProjectModal
@@ -582,9 +584,43 @@ function Polaroid({ project, onOpen }: { project: ProjectDetail; onOpen: (p: Pro
 }
 
 function TrainWindow() {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const el = ref.current; if (!el) return;
+    let pending = false;
+    const tick = () => {
+      const r = el.getBoundingClientRect();
+      const center = r.top + r.height / 2;
+      const p = Math.max(-1, Math.min(1, (window.innerHeight / 2 - center) / window.innerHeight));
+      el.style.setProperty("--tw", p.toFixed(3));
+      pending = false;
+    };
+    const onScroll = () => { if (pending) return; pending = true; requestAnimationFrame(tick); };
+    tick();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = ref.current; if (!el) return;
+    const r = el.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width - 0.5;
+    const py = (e.clientY - r.top) / r.height - 0.5;
+    el.style.setProperty("--mx-tw", px.toFixed(3));
+    el.style.setProperty("--my-tw", py.toFixed(3));
+  };
+  const onLeave = () => {
+    const el = ref.current; if (!el) return;
+    el.style.setProperty("--mx-tw", "0");
+    el.style.setProperty("--my-tw", "0");
+  };
   return (
     <div
-      className="paper-card relative overflow-hidden p-3 md:rotate-[2deg]"
+      ref={ref}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
+      className="paper-card train-window relative overflow-hidden p-3 md:rotate-[2deg]"
       style={{ background: "var(--card)" }}
     >
       <span className="tape -top-3 left-6" />
@@ -596,22 +632,34 @@ function TrainWindow() {
             "linear-gradient(to bottom, color-mix(in oklab, var(--sky-soft) 90%, white) 0%, color-mix(in oklab, var(--lamp) 50%, white) 55%, color-mix(in oklab, var(--sage) 70%, white) 100%)",
         }}
       >
-        {/* sun */}
-        <div
-          className="absolute right-8 top-8 h-20 w-20 rounded-full"
-          style={{ background: "color-mix(in oklab, var(--lamp) 80%, white)", animation: "lamp-glow 4s ease-in-out infinite" }}
-        />
-        {/* hills */}
-        <svg viewBox="0 0 400 300" className="absolute inset-x-0 bottom-0 w-full" preserveAspectRatio="none">
+        {/* sun — drifts on scroll + parallax */}
+        <div className="tw-sun absolute right-8 top-8 h-20 w-20 rounded-full"
+          style={{ background: "color-mix(in oklab, var(--lamp) 80%, white)", animation: "lamp-glow 4s ease-in-out infinite" }} />
+        {/* hills layered */}
+        <svg viewBox="0 0 400 300" className="tw-hills-1 absolute inset-x-0 bottom-0 w-full" preserveAspectRatio="none">
           <path d="M0 220 Q60 170 120 200 T240 200 T400 190 L400 300 L0 300 Z" fill="color-mix(in oklab, var(--sage) 70%, white)" opacity="0.85" />
+        </svg>
+        <svg viewBox="0 0 400 300" className="tw-hills-2 absolute inset-x-0 bottom-0 w-full" preserveAspectRatio="none">
           <path d="M0 250 Q80 210 160 240 T320 235 T400 245 L400 300 L0 300 Z" fill="color-mix(in oklab, var(--sage) 90%, var(--ink))" opacity="0.4" />
         </svg>
+        {/* a tiny torii arch passing by */}
+        <svg viewBox="0 0 60 60" className="tw-torii absolute" aria-hidden>
+          <path d="M6 18 H54 M10 14 H50 L46 18 H14 Z M16 18 V52 M44 18 V52 M14 30 H46" stroke="color-mix(in oklab, var(--primary) 80%, var(--ink))" strokeWidth="2.4" fill="none" strokeLinecap="round" />
+        </svg>
         {/* clouds */}
-        <Cloud className="absolute left-8 top-10 h-10 w-10 text-white/80" style={{ animation: "gentle-bounce 6s ease-in-out infinite" }} />
-        <Cloud className="absolute left-1/3 top-20 h-7 w-7 text-white/70" style={{ animation: "gentle-bounce 7s ease-in-out infinite", animationDelay: "1s" }} />
-        {/* window frame */}
+        <Cloud className="tw-cloud-1 absolute left-8 top-10 h-10 w-10 text-white/80" />
+        <Cloud className="tw-cloud-2 absolute left-1/3 top-20 h-7 w-7 text-white/70" />
+        {/* rain streaks on hover */}
+        <div className="tw-rain pointer-events-none absolute inset-0" aria-hidden>
+          {Array.from({ length: 14 }).map((_, i) => (
+            <span key={i} style={{ left: `${(i * 7 + 3) % 100}%`, animationDelay: `${i * 0.12}s` }} />
+          ))}
+        </div>
+        {/* window frame + warm bloom */}
         <div className="pointer-events-none absolute inset-0 rounded-2xl ring-8 ring-card" />
         <div className="pointer-events-none absolute inset-0 rounded-2xl" style={{ boxShadow: "inset 0 0 80px rgba(255,220,180,0.4)" }} />
+        {/* reflection sweep */}
+        <div className="tw-reflect pointer-events-none absolute inset-0" aria-hidden />
       </div>
       <div className="mt-3 flex items-center justify-between px-2 font-hand text-muted-foreground">
         <span className="inline-flex items-center gap-1"><MapPin className="h-4 w-4" /> somewhere quiet</span>
