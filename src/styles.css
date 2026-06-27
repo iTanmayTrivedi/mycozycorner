@@ -1041,3 +1041,6 @@ section { content-visibility: auto; contain-intrinsic-size: 1px 800px; }
   }
   .cursor-lantern { display: none; }
 }
+
+/* pause equalizer bars when not playing */
+.vinyl-bars[data-playing="0"] i { animation-play-state: paused; height: 3px; }
