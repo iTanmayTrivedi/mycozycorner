@@ -26,6 +26,8 @@ import { CatBubble } from "@/components/cozy/CatBubble";
 import { Fireflies } from "@/components/cozy/Fireflies";
 import { InkSplash } from "@/components/cozy/InkSplash";
 import { ScrollTilt3D } from "@/components/cozy/ScrollTilt3D";
+import { SmoothScroll } from "@/components/cozy/SmoothScroll";
+import { CursorTrail } from "@/components/cozy/CursorTrail";
 
 
 export const Route = createFileRoute("/")({
@@ -133,6 +135,8 @@ function Index() {
   };
   return (
     <div className="relative min-h-screen text-foreground">
+      <SmoothScroll />
+      <CursorTrail />
       <LoadingScreen />
       <ScrollProgress />
       <CursorLantern />
