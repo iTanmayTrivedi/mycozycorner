@@ -135,6 +135,8 @@ function Index() {
   };
   return (
     <div className="relative min-h-screen text-foreground">
+      <SmoothScroll />
+      <CursorTrail />
       <LoadingScreen />
       <ScrollProgress />
       <CursorLantern />
