@@ -23,6 +23,9 @@ import { petalBurst } from "@/components/cozy/confetti";
 import { ProjectModal, type ProjectDetail } from "@/components/cozy/ProjectModal";
 import { CursorLantern } from "@/components/cozy/CursorLantern";
 import { CatBubble } from "@/components/cozy/CatBubble";
+import { Fireflies } from "@/components/cozy/Fireflies";
+import { InkSplash } from "@/components/cozy/InkSplash";
+import { ScrollTilt3D } from "@/components/cozy/ScrollTilt3D";
 
 
 export const Route = createFileRoute("/")({
@@ -143,6 +146,8 @@ function Index() {
       <MeowEgg />
       <BlossomBranch />
       <ShootingStar />
+      <Fireflies />
+      <InkSplash />
       <VinylPlayer />
       <button
         type="button"
@@ -271,13 +276,15 @@ function Index() {
           </p>
         </Reveal>
 
-        <div className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-          {projects.map((p, i) => (
-            <Reveal key={p.title} variant="tilt-in" delay={i * 90}>
-              <div className="sd-tilt-in"><Polaroid project={p} onOpen={openProjectAt} /></div>
-            </Reveal>
-          ))}
-        </div>
+        <ScrollTilt3D intensity={5}>
+          <div className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+            {projects.map((p, i) => (
+              <Reveal key={p.title} variant="tilt-in" delay={i * 90}>
+                <div className="sd-tilt-in"><Polaroid project={p} onOpen={openProjectAt} /></div>
+              </Reveal>
+            ))}
+          </div>
+        </ScrollTilt3D>
       </section>
 
       {/* MARQUEE — reverse direction, sage band */}
@@ -431,7 +438,7 @@ function SectionTitle({ kicker, title, n }: { kicker: string; title: string; n?:
       {n && <span className="chapter-sticker wobble-hover">{n}</span>}
       <div>
         <p className="font-hand text-xl text-primary">{kicker}</p>
-        <h2 className="mt-1 font-serif text-4xl md:text-5xl scroll-mark" data-reveal="fade">{title}</h2>
+        <h2 className="mt-1 font-serif text-4xl md:text-5xl scroll-mark chromatic-hover" data-reveal="fade">{title}</h2>
       </div>
     </div>
   );

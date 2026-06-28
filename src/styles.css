@@ -1044,3 +1044,91 @@ section { content-visibility: auto; contain-intrinsic-size: 1px 800px; }
 
 /* pause equalizer bars when not playing */
 .vinyl-bars[data-playing="0"] i { animation-play-state: paused; height: 3px; }
+
+/* ============ NEXT-LEVEL ADDITIONS ============ */
+
+/* Fireflies — only visible in dark theme */
+.firefly-field {
+  position: fixed; inset: 0; pointer-events: none; z-index: 1;
+  opacity: 0; transition: opacity 0.8s ease;
+}
+.dark .firefly-field { opacity: 1; }
+.firefly {
+  position: absolute; border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in oklab, var(--lamp) 95%, white) 0%, color-mix(in oklab, var(--lamp) 60%, transparent) 40%, transparent 70%);
+  box-shadow: 0 0 12px 2px color-mix(in oklab, var(--lamp) 70%, transparent);
+  will-change: transform, opacity;
+  animation-name: firefly-drift, firefly-pulse;
+  animation-timing-function: ease-in-out, ease-in-out;
+  animation-iteration-count: infinite, infinite;
+}
+@keyframes firefly-drift {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(40px, -30px); }
+  50%  { transform: translate(-20px, -60px); }
+  75%  { transform: translate(-50px, -20px); }
+  100% { transform: translate(0, 0); }
+}
+@keyframes firefly-pulse {
+  0%, 100% { opacity: 0.3; }
+  50%      { opacity: 1; }
+}
+
+/* Scroll Tilt 3D wrapper */
+.scroll-tilt-3d { perspective: 1400px; }
+.scroll-tilt-3d-inner {
+  transform: rotateX(var(--tilt, 0deg)) translateZ(0);
+  transform-origin: center center;
+  transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
+  will-change: transform;
+}
+
+/* Magnetic Text — gleam ripple on hover */
+.magnetic-text { display: inline-block; position: relative; }
+.magnetic-text:hover .mg-letter {
+  text-shadow: 0 4px 18px color-mix(in oklab, var(--lamp) 50%, transparent);
+}
+
+/* Ink splash ring on click */
+.ink-ring {
+  position: absolute; width: 8px; height: 8px; border-radius: 50%;
+  border: 2px solid color-mix(in oklab, var(--primary) 70%, transparent);
+  transform: translate(-50%, -50%) scale(0.3);
+  animation: ink-ring-out 0.85s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+  pointer-events: none;
+}
+@keyframes ink-ring-out {
+  0%   { transform: translate(-50%, -50%) scale(0.3); opacity: 0.9; border-width: 3px; }
+  100% { transform: translate(-50%, -50%) scale(14); opacity: 0; border-width: 1px; }
+}
+
+/* Chromatic glitch shimmer for section titles on hover */
+.chromatic-hover { position: relative; display: inline-block; transition: text-shadow 0.3s ease; }
+.chromatic-hover:hover {
+  text-shadow:
+    -2px 0 0 color-mix(in oklab, var(--blossom) 80%, transparent),
+     2px 0 0 color-mix(in oklab, var(--sky-soft) 80%, transparent),
+     0 0 18px color-mix(in oklab, var(--lamp) 40%, transparent);
+  animation: chromatic-jitter 0.4s steps(3) infinite;
+}
+@keyframes chromatic-jitter {
+  0%, 100% { transform: translate(0, 0); }
+  33%      { transform: translate(-0.5px, 0.5px); }
+  66%      { transform: translate(0.5px, -0.5px); }
+}
+
+/* Polaroid: cursor-tracked 3D tilt */
+.polaroid {
+  transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.25s ease;
+}
+.polaroid:hover {
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateZ(20px) scale(1.04) !important;
+  z-index: 5;
+}
+
+/* Soft vignette breathing on hero — adds depth */
+@keyframes vignette-pulse {
+  0%, 100% { box-shadow: inset 0 0 200px color-mix(in oklab, var(--ink) 18%, transparent); }
+  50%      { box-shadow: inset 0 0 260px color-mix(in oklab, var(--ink) 26%, transparent); }
+}
+.hero-vignette { animation: vignette-pulse 9s ease-in-out infinite; }
