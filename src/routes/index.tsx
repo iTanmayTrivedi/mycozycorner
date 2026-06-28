@@ -276,13 +276,15 @@ function Index() {
           </p>
         </Reveal>
 
-        <div className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-          {projects.map((p, i) => (
-            <Reveal key={p.title} variant="tilt-in" delay={i * 90}>
-              <div className="sd-tilt-in"><Polaroid project={p} onOpen={openProjectAt} /></div>
-            </Reveal>
-          ))}
-        </div>
+        <ScrollTilt3D intensity={5}>
+          <div className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+            {projects.map((p, i) => (
+              <Reveal key={p.title} variant="tilt-in" delay={i * 90}>
+                <div className="sd-tilt-in"><Polaroid project={p} onOpen={openProjectAt} /></div>
+              </Reveal>
+            ))}
+          </div>
+        </ScrollTilt3D>
       </section>
 
       {/* MARQUEE — reverse direction, sage band */}
