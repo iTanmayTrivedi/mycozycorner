@@ -1290,3 +1290,18 @@ html { scroll-behavior: auto; } /* Lenis owns it */
   .bokeh-orb, .season-orb-icon { animation: none !important; }
   .constellation-cursor { display: none; }
 }
+
+/* ============ PERF SOFTENING (lag fix) ============ */
+/* Drop the page-wide skew transform — it forces full-page repaints. */
+.velocity-skew { transform: none !important; }
+/* Lighten marquee blur */
+.scroll-marquee { filter: blur(calc(var(--scroll-vel-abs, 0) * 0.4px)); }
+/* Lighter bokeh — smaller blur, no blend mode */
+.bokeh-layer { mix-blend-mode: normal; opacity: 0.45; }
+.dark .bokeh-layer { mix-blend-mode: screen; opacity: 0.3; }
+.bokeh-orb { filter: blur(14px); animation-duration: 32s !important; }
+/* Constellation: drop the drop-shadow (expensive per-frame filter) */
+.constellation-cursor { filter: none; mix-blend-mode: normal; opacity: 0.85; }
+.dark .constellation-cursor { mix-blend-mode: screen; opacity: 0.9; }
+/* Season orb: kill backdrop blur */
+.season-orb { backdrop-filter: none; background: color-mix(in oklab, var(--card) 95%, transparent); }
