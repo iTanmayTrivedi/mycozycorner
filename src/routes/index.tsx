@@ -28,6 +28,9 @@ import { InkSplash } from "@/components/cozy/InkSplash";
 import { ScrollTilt3D } from "@/components/cozy/ScrollTilt3D";
 import { SmoothScroll } from "@/components/cozy/SmoothScroll";
 import { CursorTrail } from "@/components/cozy/CursorTrail";
+import { SeasonOrb } from "@/components/cozy/SeasonOrb";
+import { ConstellationCursor } from "@/components/cozy/ConstellationCursor";
+import { BokehLayer } from "@/components/cozy/BokehLayer";
 
 
 export const Route = createFileRoute("/")({
@@ -152,6 +155,9 @@ function Index() {
       <ShootingStar />
       <Fireflies />
       <InkSplash />
+      <BokehLayer />
+      <ConstellationCursor />
+      <SeasonOrb />
       <VinylPlayer />
       <button
         type="button"
