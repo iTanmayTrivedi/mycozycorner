@@ -9,6 +9,10 @@ export function SmoothScroll() {
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    // Skip on touch devices — native momentum scrolling is already smooth,
+    // and Lenis adds noticeable input lag on phones.
+    if (window.matchMedia("(pointer: coarse)").matches) return;
+
 
     const lenis = new Lenis({
       duration: 1.15,
