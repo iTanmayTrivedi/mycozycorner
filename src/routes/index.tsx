@@ -31,6 +31,9 @@ import { CursorTrail } from "@/components/cozy/CursorTrail";
 import { SeasonOrb } from "@/components/cozy/SeasonOrb";
 import { ConstellationCursor } from "@/components/cozy/ConstellationCursor";
 import { BokehLayer } from "@/components/cozy/BokehLayer";
+import { StickyNote } from "@/components/cozy/StickyNote";
+import { useDeviceCaps } from "@/lib/device";
+
 
 
 export const Route = createFileRoute("/")({
@@ -130,6 +133,7 @@ const favorites = [
 
 function Index() {
   useParallax();
+  const { enableFx, isMobile } = useDeviceCaps();
   const [openProject, setOpenProject] = useState<ProjectDetail | null>(null);
   const [originRect, setOriginRect] = useState<DOMRect | null>(null);
   const openProjectAt = (p: ProjectDetail, rect: DOMRect) => {
@@ -139,26 +143,28 @@ function Index() {
   return (
     <div className="relative min-h-screen text-foreground">
       <SmoothScroll />
-      <CursorTrail />
       <LoadingScreen />
       <ScrollProgress />
-      <CursorLantern />
-      <CustomCursor />
-      <div className="paper-grain" aria-hidden />
+      {/* Heavy cursor + ambient layers — desktop only */}
+      {enableFx && <CursorTrail />}
+      {enableFx && <CursorLantern />}
+      {enableFx && <CustomCursor />}
+      {!isMobile && <div className="paper-grain" aria-hidden />}
       <Petals />
       <FloatingNotes />
       <SunbeamLayer />
       <PaperPlane />
       <TeacupGauge />
       <MeowEgg />
-      <BlossomBranch />
+      {enableFx && <BlossomBranch />}
       <ShootingStar />
-      <Fireflies />
+      {enableFx && <Fireflies />}
       <InkSplash />
-      <BokehLayer />
-      <ConstellationCursor />
+      {enableFx && <BokehLayer />}
+      {enableFx && <ConstellationCursor />}
       <SeasonOrb />
       <VinylPlayer />
+      {enableFx && <StickyNote />}
       <button
         type="button"
         className="ribbon"
@@ -167,6 +173,7 @@ function Index() {
       >
         ✿ say hi →
       </button>
+
 
 
       {/* Nav */}
