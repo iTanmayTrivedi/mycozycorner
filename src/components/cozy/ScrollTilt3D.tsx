@@ -7,6 +7,8 @@ export function ScrollTilt3D({ children, intensity = 6, className = "" }: { chil
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (window.matchMedia("(pointer: coarse)").matches) return;
+
     const el = ref.current;
     if (!el) return;
     let raf = 0, pending = false;
