@@ -6,7 +6,12 @@ export function Petals({ count = 12 }: { count?: number }) {
   const [petals, setPetals] = useState<Petal[]>([]);
 
   useEffect(() => {
-    const arr: Petal[] = Array.from({ length: count }, (_, i) => ({
+    // Halve density on mobile to keep paints cheap.
+    const isMobile =
+      typeof window !== "undefined" &&
+      (window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 768);
+    const n = isMobile ? Math.max(4, Math.round(count / 2)) : count;
+    const arr: Petal[] = Array.from({ length: n }, (_, i) => ({
       id: i,
       left: Math.random() * 100,
       delay: Math.random() * 12,
@@ -17,6 +22,7 @@ export function Petals({ count = 12 }: { count?: number }) {
     }));
     setPetals(arr);
   }, [count]);
+
 
   return (
     <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden>
@@ -43,8 +49,14 @@ export function Petals({ count = 12 }: { count?: number }) {
           />
         </svg>
       ))}
-      {/* dust motes */}
-      {Array.from({ length: 10 }).map((_, i) => (
+      {/* dust motes — fewer on mobile */}
+      {Array.from({
+        length:
+          typeof window !== "undefined" &&
+          (window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 768)
+            ? 5
+            : 10,
+      }).map((_, i) => (
         <span
           key={`m-${i}`}
           className="absolute rounded-full"
