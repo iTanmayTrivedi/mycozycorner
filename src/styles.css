@@ -1305,3 +1305,95 @@ html { scroll-behavior: auto; } /* Lenis owns it */
 .dark .constellation-cursor { mix-blend-mode: screen; opacity: 0.9; }
 /* Season orb: kill backdrop blur */
 .season-orb { backdrop-filter: none; background: color-mix(in oklab, var(--card) 95%, transparent); }
+
+/* ============ STICKY NOTE (draggable) ============ */
+.sticky-note {
+  position: fixed;
+  z-index: 60;
+  width: 168px;
+  padding: 14px 14px 28px;
+  background: color-mix(in oklab, var(--lamp) 70%, white);
+  color: var(--ink);
+  border-radius: 4px;
+  box-shadow:
+    0 12px 22px -10px color-mix(in oklab, var(--ink) 40%, transparent),
+    0 1px 0 color-mix(in oklab, var(--ink) 8%, transparent) inset;
+  font-family: var(--font-hand, "Caveat", cursive);
+  font-size: 1.25rem;
+  line-height: 1.15;
+  transform: rotate(-4deg);
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  transition: transform 0.3s cubic-bezier(.2,.9,.3,1.4), box-shadow 0.3s ease;
+  animation: sticky-wobble 6s ease-in-out infinite;
+}
+.sticky-note:hover {
+  transform: rotate(-2deg) translateY(-3px) scale(1.03);
+  box-shadow: 0 18px 30px -10px color-mix(in oklab, var(--ink) 45%, transparent);
+}
+.sticky-note:active { cursor: grabbing; }
+.sticky-note-pin {
+  position: absolute;
+  top: -6px; left: 50%;
+  width: 14px; height: 14px;
+  margin-left: -7px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, color-mix(in oklab, var(--primary) 60%, white), var(--primary));
+  box-shadow: 0 2px 4px color-mix(in oklab, var(--ink) 40%, transparent);
+}
+.sticky-note-text { display: block; }
+.sticky-note-hint {
+  position: absolute;
+  bottom: 6px; left: 12px; right: 12px;
+  font-family: var(--font-sans, system-ui);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.45;
+}
+@keyframes sticky-wobble {
+  0%, 100% { transform: rotate(-4deg); }
+  50%      { transform: rotate(-2deg); }
+}
+
+/* ============ CAT PET COUNTER ============ */
+.cat-pet-count {
+  position: absolute;
+  top: -6px; right: -10px;
+  background: color-mix(in oklab, var(--blossom) 75%, white);
+  color: var(--ink);
+  font-family: var(--font-hand, "Caveat", cursive);
+  font-size: 13px;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  box-shadow: 0 2px 6px color-mix(in oklab, var(--ink) 25%, transparent);
+  animation: pet-pop 0.4s cubic-bezier(.2,.9,.3,1.4);
+  pointer-events: none;
+}
+@keyframes pet-pop {
+  0%   { transform: scale(0.4) rotate(-12deg); }
+  60%  { transform: scale(1.2) rotate(6deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+
+/* ============ MOBILE PERFORMANCE GATE ============ */
+@media (max-width: 767px), (pointer: coarse) {
+  /* Kill expensive blurs + filters on mobile */
+  .paper-grain { display: none !important; }
+  .bokeh-layer, .constellation-cursor, .cursor-lantern,
+  .cozy-dot, .cozy-ring, .cozy-trail, .cursor-ghost-dot { display: none !important; }
+  .scroll-marquee { filter: none !important; }
+  .polaroid { transform: none !important; }
+  .sticky-note { display: none !important; }
+  /* Lighter shadows */
+  .paper-card { box-shadow: 0 6px 16px -8px rgba(30,41,59,0.18) !important; }
+  /* Disable cursor-tracked 3D tilts */
+  .scroll-tilt-3d-inner { transform: none !important; }
+  /* Lighten section reveal blur (very expensive on mobile GPUs) */
+  [data-reveal] { filter: none !important; }
+  /* Slow down petal-fall a touch to reduce composite work */
+  svg[viewBox="0 0 20 20"] { animation-duration: 22s !important; }
+  /* Drop chromatic-hover and grain-y filters */
+  .chromatic-hover:hover { filter: none !important; text-shadow: none !important; }
+}
