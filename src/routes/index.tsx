@@ -538,23 +538,6 @@ function Polaroid({ project, onOpen }: { project: ProjectDetail; onOpen: (p: Pro
 
 function TrainWindow() {
   const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const el = ref.current; if (!el) return;
-    let pending = false;
-    const tick = () => {
-      const r = el.getBoundingClientRect();
-      const center = r.top + r.height / 2;
-      const p = Math.max(-1, Math.min(1, (window.innerHeight / 2 - center) / window.innerHeight));
-      el.style.setProperty("--tw", p.toFixed(3));
-      pending = false;
-    };
-    const onScroll = () => { if (pending) return; pending = true; requestAnimationFrame(tick); };
-    tick();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
   const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const el = ref.current; if (!el) return;
     const r = el.getBoundingClientRect();

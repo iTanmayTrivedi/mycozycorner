@@ -397,15 +397,13 @@ html.has-cozy-cursor * {
   display: inline-block;
   opacity: 0;
   transform: translateY(0.6em) rotate(6deg);
-  filter: blur(6px);
-  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), filter 0.7s ease;
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
   transition-delay: calc(var(--i, 0) * 60ms);
 }
 [data-shown="1"] .split-word,
 .split-word.shown {
   opacity: 1;
   transform: none;
-  filter: blur(0);
 }
 
 /* ===== Polaroid scroll-tilt extra glow ===== */
@@ -432,12 +430,12 @@ section { content-visibility: auto; contain-intrinsic-size: 1px 800px; }
   .sd-rise, .sd-tilt-in, .sd-drift-x, .sd-rotate-on-scroll, .sd-pin-zoom { animation: none; }
 }
 @keyframes sd-rise {
-  from { opacity: 0; transform: translateY(60px) scale(0.96); filter: blur(8px); }
-  to   { opacity: 1; transform: none; filter: blur(0); }
+  from { opacity: 0; transform: translateY(42px) scale(0.98); }
+  to   { opacity: 1; transform: none; }
 }
 @keyframes sd-tilt {
-  from { opacity: 0; transform: rotate(-8deg) translateY(40px); filter: blur(6px); }
-  to   { opacity: 1; transform: rotate(0) translateY(0); filter: blur(0); }
+  from { opacity: 0; transform: rotate(-4deg) translateY(30px); }
+  to   { opacity: 1; transform: rotate(0) translateY(0); }
 }
 @keyframes sd-drift-x {
   from { transform: translateX(-12vw); }
@@ -761,9 +759,7 @@ section { content-visibility: auto; contain-intrinsic-size: 1px 800px; }
 /* ===== Polaroid scroll sway ===== */
 @supports (animation-timeline: view()) {
   .sd-sway {
-    animation: sd-sway linear both;
-    animation-timeline: view();
-    animation-range: entry 0% cover 80%;
+    animation: none;
   }
 }
 @keyframes sd-sway {
@@ -1099,14 +1095,12 @@ section { content-visibility: auto; contain-intrinsic-size: 1px 800px; }
   width: 10px; height: 10px;
   border-radius: 50%;
   transform: translate(-50%, -50%) scale(1);
-  filter: blur(1px);
   opacity: 0.7;
-  mix-blend-mode: screen;
   animation: ghost-fade 0.7s ease-out forwards;
 }
 @keyframes ghost-fade {
   0%   { opacity: 0.85; transform: translate(-50%, -50%) scale(1); }
-  100% { opacity: 0;    transform: translate(-50%, -50%) scale(0.2); filter: blur(4px); }
+  100% { opacity: 0;    transform: translate(-50%, -50%) scale(0.2); }
 }
 
 /* Velocity-reactive skew on the whole page main content */
@@ -1120,7 +1114,7 @@ section { content-visibility: auto; contain-intrinsic-size: 1px 800px; }
 
 /* Scroll-velocity blur on marquees only */
 .scroll-marquee {
-  filter: blur(calc(var(--scroll-vel-abs, 0) * 1.2px));
+  filter: none;
 }
 
 /* Polaroid hover: chromatic edge */
@@ -1152,8 +1146,7 @@ html { scroll-behavior: auto; } /* Lenis owns it */
   gap: 8px;
   padding: 8px 14px 8px 10px;
   border-radius: 9999px;
-  background: color-mix(in oklab, var(--card) 80%, transparent);
-  backdrop-filter: blur(8px);
+  background: color-mix(in oklab, var(--card) 95%, transparent);
   box-shadow: 0 8px 28px -10px color-mix(in oklab, var(--ink) 30%, transparent),
               0 0 0 1px color-mix(in oklab, var(--foreground) 8%, transparent);
   transition: transform 0.35s cubic-bezier(.2,.9,.3,1.4), box-shadow 0.3s ease;
@@ -1253,7 +1246,7 @@ html { scroll-behavior: auto; } /* Lenis owns it */
 /* Drop the page-wide skew transform — it forces full-page repaints. */
 .velocity-skew { transform: none !important; }
 /* Lighten marquee blur */
-.scroll-marquee { filter: blur(calc(var(--scroll-vel-abs, 0) * 0.4px)); }
+.scroll-marquee { filter: none; }
 /* Lighter bokeh — smaller blur, no blend mode */
 .bokeh-layer { mix-blend-mode: normal; opacity: 0.45; }
 .dark .bokeh-layer { mix-blend-mode: screen; opacity: 0.3; }
