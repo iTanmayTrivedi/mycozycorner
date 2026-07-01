@@ -124,16 +124,7 @@
     position: relative;
   }
   body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    background-image:
-      radial-gradient(circle at 20% 10%, color-mix(in oklab, var(--blossom) 55%, transparent) 0%, transparent 40%),
-      radial-gradient(circle at 80% 20%, color-mix(in oklab, var(--sky-soft) 50%, transparent) 0%, transparent 45%),
-      radial-gradient(circle at 50% 90%, color-mix(in oklab, var(--sage) 45%, transparent) 0%, transparent 50%);
-    transform: translateZ(0);
+    content: none;
   }
   h1, h2, h3, h4 {
     font-family: var(--font-serif);
@@ -225,8 +216,7 @@
 /* ===== Scroll reveal ===== */
 [data-reveal] {
   opacity: 0;
-  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1), filter 0.9s ease;
-  filter: blur(4px);
+  transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1), transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
 [data-reveal="fade-up"]      { transform: translate3d(0, 36px, 0); }
 [data-reveal="fade"]         { transform: none; }
@@ -237,7 +227,6 @@
 [data-reveal][data-shown="1"] {
   opacity: 1;
   transform: none;
-  filter: blur(0);
 }
 
 /* ===== Custom cursor ===== */
@@ -277,8 +266,7 @@ html.has-cozy-cursor * {
 
 /* ===== Hover lifts (organic, GPU only) ===== */
 .lift {
-  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.45s ease, filter 0.45s ease;
-  will-change: transform;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.28s ease;
 }
 .lift:hover {
   transform: translateY(-6px) rotate(-0.4deg);
@@ -305,8 +293,7 @@ html.has-cozy-cursor * {
 /* Polaroid tilt — JS sets --rx/--ry */
 .polaroid {
   transform-style: preserve-3d;
-  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.5s ease;
-  will-change: transform;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease;
 }
 .polaroid:hover {
   transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(-6px) scale(1.02);
@@ -324,9 +311,6 @@ html.has-cozy-cursor * {
   overflow: hidden;
   width: 100%;
   padding: 1.25rem 0;
-  transform: skewY(var(--mq-skew, 0deg)) rotate(var(--mq-rot, 0deg));
-  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-  will-change: transform;
   mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
 }
 .scroll-marquee-track {
@@ -334,7 +318,6 @@ html.has-cozy-cursor * {
   align-items: center;
   gap: 2.5rem;
   white-space: nowrap;
-  transform: translate3d(var(--mq-offset, 0px), 0, 0);
   will-change: transform;
 }
 .scroll-marquee-track.mq-left  { animation: mq-scroll-l 38s linear infinite; }
@@ -352,12 +335,12 @@ html.has-cozy-cursor * {
   display: inline-block;
 }
 @keyframes mq-scroll-l {
-  from { margin-left: 0; }
-  to   { margin-left: -50%; }
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-33.333%, 0, 0); }
 }
 @keyframes mq-scroll-r {
-  from { margin-left: -50%; }
-  to   { margin-left: 0; }
+  from { transform: translate3d(-33.333%, 0, 0); }
+  to   { transform: translate3d(0, 0, 0); }
 }
 @keyframes spin-slow {
   to { transform: rotate(360deg); }
@@ -446,30 +429,7 @@ section { content-visibility: auto; contain-intrinsic-size: 1px 800px; }
    Pure CSS, zero JS, runs on compositor. Falls back to a static state
    for browsers without scroll-timeline support. ===== */
 @supports (animation-timeline: view()) {
-  .sd-rise {
-    animation: sd-rise linear both;
-    animation-timeline: view();
-    animation-range: entry 0% cover 35%;
-  }
-  .sd-tilt-in {
-    animation: sd-tilt linear both;
-    animation-timeline: view();
-    animation-range: entry 0% cover 40%;
-  }
-  .sd-drift-x {
-    animation: sd-drift-x linear both;
-    animation-timeline: view();
-    animation-range: cover 0% cover 100%;
-  }
-  .sd-rotate-on-scroll {
-    animation: sd-spin linear both;
-    animation-timeline: scroll(root);
-  }
-  .sd-pin-zoom {
-    animation: sd-pinzoom linear both;
-    animation-timeline: view();
-    animation-range: cover 0% cover 100%;
-  }
+  .sd-rise, .sd-tilt-in, .sd-drift-x, .sd-rotate-on-scroll, .sd-pin-zoom { animation: none; }
 }
 @keyframes sd-rise {
   from { opacity: 0; transform: translateY(60px) scale(0.96); filter: blur(8px); }
@@ -612,8 +572,7 @@ section { content-visibility: auto; contain-intrinsic-size: 1px 800px; }
   gap: 10px;
   padding: 8px 14px 8px 8px;
   border-radius: 999px;
-  background: color-mix(in oklab, var(--card) 85%, transparent);
-  backdrop-filter: blur(8px);
+  background: color-mix(in oklab, var(--card) 96%, transparent);
   border: 1px solid color-mix(in oklab, var(--border) 80%, transparent);
   box-shadow: 0 10px 30px -16px rgba(30,41,59,0.35);
   font-family: var(--font-hand);
@@ -720,7 +679,6 @@ section { content-visibility: auto; contain-intrinsic-size: 1px 800px; }
   pointer-events: none;
   z-index: 4;
   opacity: 0.95;
-  filter: drop-shadow(0 8px 14px rgba(30,41,59,0.12));
 }
 .blossom-branch .branch-sway {
   transform-origin: 100% 0%;

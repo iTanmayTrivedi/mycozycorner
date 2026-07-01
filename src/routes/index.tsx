@@ -4,34 +4,20 @@ import {
   Coffee, Code2, BookOpen, Music, Mail, MapPin, Train, Sparkles,
   ExternalLink, Send, Heart, Cloud, Leaf, Camera,
 } from "lucide-react";
-import { Petals } from "@/components/cozy/Petals";
 import { ThemeToggle } from "@/components/cozy/ThemeToggle";
 import { TypeCycle } from "@/components/cozy/TypeCycle";
 import { LoadingScreen } from "@/components/cozy/LoadingScreen";
-import { CustomCursor } from "@/components/cozy/CustomCursor";
 import { Reveal } from "@/components/cozy/Reveal";
 import { ScrollMarquee } from "@/components/cozy/ScrollMarquee";
 import { ScrollProgress } from "@/components/cozy/ScrollProgress";
-import { PaperPlane } from "@/components/cozy/PaperPlane";
-import { TeacupGauge } from "@/components/cozy/TeacupGauge";
 import { MeowEgg } from "@/components/cozy/MeowEgg";
 import { VinylPlayer } from "@/components/cozy/VinylPlayer";
-import { BlossomBranch } from "@/components/cozy/BlossomBranch";
-import { ShootingStar } from "@/components/cozy/ShootingStar";
 import { WavyDivider } from "@/components/cozy/WavyDivider";
 import { petalBurst } from "@/components/cozy/confetti";
 import { ProjectModal, type ProjectDetail } from "@/components/cozy/ProjectModal";
-import { CursorLantern } from "@/components/cozy/CursorLantern";
 import { CatBubble } from "@/components/cozy/CatBubble";
-import { Fireflies } from "@/components/cozy/Fireflies";
-import { InkSplash } from "@/components/cozy/InkSplash";
-import { ScrollTilt3D } from "@/components/cozy/ScrollTilt3D";
 import { SmoothScroll } from "@/components/cozy/SmoothScroll";
-import { CursorTrail } from "@/components/cozy/CursorTrail";
 import { SeasonOrb } from "@/components/cozy/SeasonOrb";
-import { ConstellationCursor } from "@/components/cozy/ConstellationCursor";
-import { BokehLayer } from "@/components/cozy/BokehLayer";
-import { StickyNote } from "@/components/cozy/StickyNote";
 import { useDeviceCaps } from "@/lib/device";
 
 
@@ -132,8 +118,7 @@ const favorites = [
 ];
 
 function Index() {
-  useParallax();
-  const { enableFx, isMobile } = useDeviceCaps();
+  const { isMobile } = useDeviceCaps();
   const [openProject, setOpenProject] = useState<ProjectDetail | null>(null);
   const [originRect, setOriginRect] = useState<DOMRect | null>(null);
   const openProjectAt = (p: ProjectDetail, rect: DOMRect) => {
@@ -145,26 +130,9 @@ function Index() {
       <SmoothScroll />
       <LoadingScreen />
       <ScrollProgress />
-      {/* Heavy cursor + ambient layers — desktop only */}
-      {enableFx && <CursorTrail />}
-      {enableFx && <CursorLantern />}
-      {enableFx && <CustomCursor />}
-      {!isMobile && <div className="paper-grain" aria-hidden />}
-      {!isMobile && <Petals />}
-      {!isMobile && <FloatingNotes />}
-      {!isMobile && <SunbeamLayer />}
-      {!isMobile && <PaperPlane />}
-      {!isMobile && <TeacupGauge />}
       <MeowEgg />
-      {enableFx && <BlossomBranch />}
-      {!isMobile && <ShootingStar />}
-      {enableFx && <Fireflies />}
-      {enableFx && <InkSplash />}
-      {enableFx && <BokehLayer />}
-      {enableFx && <ConstellationCursor />}
       <SeasonOrb />
       <VinylPlayer />
-      {enableFx && <StickyNote />}
 
       <button
         type="button"
@@ -294,15 +262,13 @@ function Index() {
           </p>
         </Reveal>
 
-        <ScrollTilt3D intensity={5}>
-          <div className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-            {projects.map((p, i) => (
-              <Reveal key={p.title} variant="tilt-in" delay={i * 90}>
-                <div className="sd-tilt-in"><Polaroid project={p} onOpen={openProjectAt} /></div>
-              </Reveal>
-            ))}
-          </div>
-        </ScrollTilt3D>
+        <div className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+          {projects.map((p, i) => (
+            <Reveal key={p.title} variant="tilt-in" delay={i * 90}>
+              <div><Polaroid project={p} onOpen={openProjectAt} /></div>
+            </Reveal>
+          ))}
+        </div>
       </section>
 
       {/* MARQUEE — reverse direction, sage band */}
@@ -380,44 +346,6 @@ function Index() {
         originRect={originRect}
         onClose={() => setOpenProject(null)}
       />
-    </div>
-  );
-}
-
-function useParallax() {
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const els = Array.from(document.querySelectorAll<HTMLElement>(".parallax"));
-    if (!els.length) return;
-    let raf = 0;
-    let pending = false;
-    const tick = () => {
-      const y = window.scrollY;
-      for (const el of els) {
-        const speed = parseFloat(el.dataset.speed || "0.1");
-        el.style.setProperty("--py", `${y * speed * -1}px`);
-      }
-      pending = false;
-    };
-    const onScroll = () => {
-      if (pending) return;
-      pending = true;
-      raf = requestAnimationFrame(tick);
-    };
-    tick();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => { cancelAnimationFrame(raf); window.removeEventListener("scroll", onScroll); };
-  }, []);
-}
-
-function SunbeamLayer() {
-  return (
-    <div aria-hidden className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-      <div className="parallax absolute -right-40 -top-40 h-[420px] w-[420px] rounded-full" data-speed="0.04"
-        style={{ background: "radial-gradient(circle, color-mix(in oklab, var(--lamp) 35%, transparent), transparent 65%)" }} />
-      <div className="parallax absolute -left-32 top-1/2 h-[360px] w-[360px] rounded-full" data-speed="0.08"
-        style={{ background: "radial-gradient(circle, color-mix(in oklab, var(--blossom) 35%, transparent), transparent 65%)" }} />
     </div>
   );
 }
