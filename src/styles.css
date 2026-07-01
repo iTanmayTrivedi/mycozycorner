@@ -1397,3 +1397,57 @@ html { scroll-behavior: auto; } /* Lenis owns it */
   /* Drop chromatic-hover and grain-y filters */
   .chromatic-hover:hover { filter: none !important; text-shadow: none !important; }
 }
+
+/* ============ MOBILE ULTRA-LITE MODE ============ */
+@media (max-width: 767px), (pointer: coarse) {
+  /* Kill body::before radial-gradient fixed layer (repaints on scroll) */
+  body::before { display: none !important; }
+
+  /* Kill every always-running animation on mobile — they stack up on weak GPUs */
+  .paper-grain, .cat-walker, .cat-bob, .blossom-branch, .shooting-star,
+  .paper-plane, .teacup-gauge, .floating-notes, .sunbeam-layer,
+  .chapter-sticker, .season-orb-icon, .vinyl-disc, .vinyl-bars i,
+  .bokeh-orb, .cursor-ghost-dot, .cozy-trail,
+  .stamp, .ribbon, .sticky-note, .mag-letter {
+    animation: none !important;
+  }
+
+  /* Reveal: no blur transition, no transform — just fade */
+  [data-reveal] {
+    filter: none !important;
+    transform: none !important;
+    transition: opacity 0.5s ease !important;
+  }
+  [data-reveal][data-shown="1"] { opacity: 1 !important; }
+
+  /* Kill scroll-driven view-timeline animations (Chrome mobile choke) */
+  .sd-tilt-in, .sd-rise, .scroll-mark { animation: none !important; }
+
+  /* Marquees: static, no filters, no scroll-coupled offset */
+  .scroll-marquee { transform: none !important; filter: none !important; }
+  .scroll-marquee-track { transform: none !important; }
+
+  /* Parallax off */
+  .parallax { transform: none !important; }
+
+  /* Polaroid + lift: no perspective, no shadow bloom */
+  .polaroid, .polaroid:hover, .lift, .lift:hover {
+    transform: none !important;
+    box-shadow: 0 4px 10px -6px rgba(30,41,59,0.2) !important;
+  }
+
+  /* Kill content-visibility (was helpful, but skip work by removing shadows/animations) */
+  /* section stays with content-visibility auto — fine */
+
+  /* Fewer petals? already handled in Petals.tsx; but if any render, freeze */
+  svg[viewBox="0 0 20 20"] { animation: none !important; }
+
+  /* Buttons: static */
+  .magnetic { transform: none !important; }
+
+  /* Wavy dividers: reduce SVG cost */
+  .wavy-divider { display: none !important; }
+
+  /* Kill float-note + mote */
+  span[style*="mote"], .absolute[style*="float-note"] { animation: none !important; }
+}
