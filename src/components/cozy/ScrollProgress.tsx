@@ -1,13 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 
 export function ScrollProgress() {
-  const [p, setP] = useState(0);
+  const barRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     let pending = false;
     const tick = () => {
       const h = document.documentElement;
       const max = h.scrollHeight - h.clientHeight;
-      setP(max <= 0 ? 0 : window.scrollY / max);
+      const p = max <= 0 ? 0 : window.scrollY / max;
+      if (barRef.current) barRef.current.style.transform = `scaleX(${p})`;
       pending = false;
     };
     const onScroll = () => {
@@ -23,12 +24,13 @@ export function ScrollProgress() {
   return (
     <div className="pointer-events-none fixed left-0 right-0 top-0 z-[90] h-[3px]">
       <div
+        ref={barRef}
         className="h-full origin-left"
         style={{
-          transform: `scaleX(${p})`,
+          transform: "scaleX(0)",
           background: "linear-gradient(90deg, var(--blossom), var(--lamp), var(--primary))",
           boxShadow: "0 0 10px color-mix(in oklab, var(--lamp) 60%, transparent)",
-          transition: "transform 0.08s linear",
+          transition: "none",
         }}
       />
     </div>
