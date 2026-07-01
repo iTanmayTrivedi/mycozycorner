@@ -141,7 +141,7 @@ function Index() {
     setOpenProject(p);
   };
   return (
-    <div className="relative min-h-screen text-foreground">
+    <div className={`relative min-h-screen text-foreground ${isMobile ? "is-mobile-lite" : ""}`}>
       <SmoothScroll />
       <LoadingScreen />
       <ScrollProgress />
@@ -150,21 +150,22 @@ function Index() {
       {enableFx && <CursorLantern />}
       {enableFx && <CustomCursor />}
       {!isMobile && <div className="paper-grain" aria-hidden />}
-      <Petals />
-      <FloatingNotes />
-      <SunbeamLayer />
-      <PaperPlane />
-      <TeacupGauge />
+      {!isMobile && <Petals />}
+      {!isMobile && <FloatingNotes />}
+      {!isMobile && <SunbeamLayer />}
+      {!isMobile && <PaperPlane />}
+      {!isMobile && <TeacupGauge />}
       <MeowEgg />
       {enableFx && <BlossomBranch />}
-      <ShootingStar />
+      {!isMobile && <ShootingStar />}
       {enableFx && <Fireflies />}
-      <InkSplash />
+      {enableFx && <InkSplash />}
       {enableFx && <BokehLayer />}
       {enableFx && <ConstellationCursor />}
       <SeasonOrb />
       <VinylPlayer />
       {enableFx && <StickyNote />}
+
       <button
         type="button"
         className="ribbon"
