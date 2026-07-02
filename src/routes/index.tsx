@@ -19,6 +19,7 @@ import { CatBubble } from "@/components/cozy/CatBubble";
 import { SmoothScroll } from "@/components/cozy/SmoothScroll";
 import { SeasonOrb } from "@/components/cozy/SeasonOrb";
 import { useDeviceCaps } from "@/lib/device";
+import { CustomCursor } from "@/components/cozy/CustomCursor";
 
 
 
