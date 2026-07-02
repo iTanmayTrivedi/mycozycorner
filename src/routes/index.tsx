@@ -134,6 +134,7 @@ function Index() {
       <MeowEgg />
       <SeasonOrb />
       <VinylPlayer />
+      {!isMobile && <CustomCursor />}
 
       <button
         type="button"
