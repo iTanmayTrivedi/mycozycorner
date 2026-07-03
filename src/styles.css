@@ -1402,3 +1402,221 @@ html { scroll-behavior: auto; } /* Lenis owns it */
   /* Kill float-note + mote */
   span[style*="mote"], .absolute[style*="float-note"] { animation: none !important; }
 }
+
+/* ============================================================
+   NEXT-LEVEL HOVER EFFECTS — desktop, compositor-only.
+   All effects use transform / opacity / background-position only
+   so they don't trigger layout or paint on scroll.
+   ============================================================ */
+
+@media (hover: hover) and (pointer: fine) {
+
+  /* ---- 1. Cursor-tracked sheen on every paper card ---- */
+  .paper-card { position: relative; isolation: isolate; }
+  .paper-card::after {
+    content: "";
+    position: absolute; inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: radial-gradient(320px circle at var(--mx, 50%) var(--my, 50%),
+      color-mix(in oklab, var(--lamp) 45%, transparent) 0%,
+      color-mix(in oklab, var(--blossom) 20%, transparent) 30%,
+      transparent 70%);
+    opacity: 0;
+    transition: opacity 350ms ease;
+    mix-blend-mode: soft-light;
+    z-index: 1;
+  }
+  .paper-card[data-glow="1"]::after { opacity: 0.9; }
+  .paper-card > * { position: relative; z-index: 2; }
+
+  /* ---- 2. Polaroid: holographic conic border on hover ---- */
+  .polaroid { transition: transform 500ms cubic-bezier(.2,.9,.3,1.2), box-shadow 400ms ease; }
+  .polaroid::before {
+    content: "";
+    position: absolute; inset: -2px;
+    border-radius: inherit;
+    padding: 2px;
+    background: conic-gradient(from calc(var(--mx, 50) * 3.6deg),
+      color-mix(in oklab, var(--blossom) 90%, white),
+      color-mix(in oklab, var(--sky-soft) 90%, white),
+      color-mix(in oklab, var(--sage) 90%, white),
+      color-mix(in oklab, var(--lamp) 90%, white),
+      color-mix(in oklab, var(--blossom) 90%, white));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 400ms ease;
+    pointer-events: none;
+    z-index: 3;
+  }
+  .polaroid:hover::before { opacity: 0.9; }
+  .polaroid:hover {
+    box-shadow: 0 8px 20px -4px color-mix(in oklab, var(--primary) 22%, transparent),
+                0 24px 60px -20px color-mix(in oklab, var(--blossom) 60%, transparent);
+  }
+
+  /* Sparkles that pop around the polaroid on hover */
+  .polaroid > .sparkle { display: none; }
+  .polaroid::marker { content: ""; }
+  .polaroid:hover .tape { transform: rotate(-8deg) translateY(-2px) scale(1.05); transition: transform 400ms cubic-bezier(.2,.9,.3,1.4); }
+
+  /* ---- 3. Chapter sticker: 3D coin flip ---- */
+  .chapter-sticker {
+    transform-style: preserve-3d;
+    transition: transform 700ms cubic-bezier(.2,.9,.3,1.4);
+  }
+  .chapter-sticker:hover {
+    transform: rotate(6deg) scale(1.12) rotateY(360deg) !important;
+    filter: drop-shadow(0 8px 16px color-mix(in oklab, var(--primary) 40%, transparent));
+  }
+
+  /* ---- 4. Nav link: sparkle trail + gradient underline ---- */
+  .cozy-link { position: relative; transition: color 300ms ease; }
+  .cozy-link::before {
+    content: "✿";
+    position: absolute;
+    left: var(--mx, 50%); top: -14px;
+    font-size: 12px;
+    color: color-mix(in oklab, var(--blossom) 90%, var(--primary));
+    opacity: 0;
+    transform: translate(-50%, 0) scale(0.5) rotate(0deg);
+    transition: opacity 220ms ease, transform 500ms cubic-bezier(.2,.9,.3,1.4);
+    pointer-events: none;
+  }
+  .cozy-link:hover { color: var(--primary); }
+  .cozy-link:hover::before { opacity: 1; transform: translate(-50%, -6px) scale(1) rotate(180deg); }
+  .cozy-link::after {
+    background: linear-gradient(90deg,
+      color-mix(in oklab, var(--blossom) 90%, var(--primary)),
+      color-mix(in oklab, var(--sky-soft) 90%, var(--primary)),
+      color-mix(in oklab, var(--sage) 90%, var(--primary))) !important;
+    height: 3px !important;
+    border-radius: 2px;
+  }
+
+  /* ---- 5. Ink underline: brush-stroke sweep on hover ---- */
+  .ink-underline {
+    background-size: 0% 100%;
+    transition: background-size 700ms cubic-bezier(.2,.9,.3,1.2);
+  }
+  .ink-underline:hover { background-size: 100% 100%; }
+
+  /* ---- 6. Section title: gradient shimmer on hover ---- */
+  h2.scroll-mark {
+    background: linear-gradient(90deg,
+      var(--foreground) 0%, var(--foreground) 40%,
+      color-mix(in oklab, var(--primary) 90%, var(--foreground)) 50%,
+      var(--foreground) 60%, var(--foreground) 100%);
+    background-size: 250% 100%;
+    background-position: 100% 50%;
+    -webkit-background-clip: text; background-clip: text;
+    transition: background-position 900ms cubic-bezier(.2,.9,.3,1.2), transform 400ms ease;
+  }
+  h2.scroll-mark:hover {
+    -webkit-text-fill-color: transparent;
+    background-position: 0% 50%;
+    transform: translateY(-2px);
+  }
+
+  /* ---- 7. Ribbon: peel-and-wave on hover ---- */
+  .ribbon { transition: transform 400ms cubic-bezier(.2,.9,.3,1.4), box-shadow 300ms; }
+  .ribbon:hover {
+    transform: translateY(-3px) rotate(-3deg) scale(1.05);
+    box-shadow: 0 12px 24px -8px color-mix(in oklab, var(--primary) 40%, transparent);
+    animation: ribbon-wave 800ms ease-in-out infinite;
+  }
+  @keyframes ribbon-wave {
+    0%, 100% { transform: translateY(-3px) rotate(-3deg) scale(1.05); }
+    50%      { transform: translateY(-6px) rotate(-6deg) scale(1.07); }
+  }
+
+  /* ---- 8. Timeline dot rings on hover ---- */
+  li:hover > div > span[style*="border-color"] {
+    animation: dot-ping 900ms ease-out !important;
+  }
+  @keyframes dot-ping {
+    0%   { box-shadow: 0 0 0 0 color-mix(in oklab, var(--primary) 60%, transparent); }
+    100% { box-shadow: 0 0 0 22px color-mix(in oklab, var(--primary) 0%, transparent); }
+  }
+
+  /* ---- 9. Cozy button liquid shimmer border ---- */
+  .magnetic {
+    background-image: linear-gradient(var(--primary), var(--primary)),
+      conic-gradient(from 0deg,
+        color-mix(in oklab, var(--blossom) 90%, white),
+        color-mix(in oklab, var(--lamp) 90%, white),
+        color-mix(in oklab, var(--sage) 90%, white),
+        color-mix(in oklab, var(--sky-soft) 90%, white),
+        color-mix(in oklab, var(--blossom) 90%, white));
+    background-origin: border-box, border-box;
+    background-clip: padding-box, border-box;
+    border: 2px solid transparent;
+    transition: transform 300ms cubic-bezier(.2,.9,.3,1.4), box-shadow 300ms;
+  }
+  .magnetic:hover {
+    box-shadow: 0 14px 30px -10px color-mix(in oklab, var(--primary) 45%, transparent),
+                0 0 0 3px color-mix(in oklab, var(--blossom) 40%, transparent);
+    animation: liquid-spin 3s linear infinite;
+  }
+  @keyframes liquid-spin {
+    to { --_a: 360deg; background-image: linear-gradient(var(--primary), var(--primary)),
+      conic-gradient(from 360deg,
+        color-mix(in oklab, var(--blossom) 90%, white),
+        color-mix(in oklab, var(--lamp) 90%, white),
+        color-mix(in oklab, var(--sage) 90%, white),
+        color-mix(in oklab, var(--sky-soft) 90%, white),
+        color-mix(in oklab, var(--blossom) 90%, white)); }
+  }
+
+  /* ---- 10. Scribble-border cards: cursor-tracked lift + glow ---- */
+  .scribble-border {
+    transition: transform 400ms cubic-bezier(.2,.9,.3,1.4), border-color 300ms, box-shadow 300ms;
+    position: relative;
+  }
+  .scribble-border:hover {
+    transform: translateY(-4px) rotate(-0.6deg);
+    border-color: color-mix(in oklab, var(--primary) 70%, transparent);
+    box-shadow: 0 18px 40px -20px color-mix(in oklab, var(--primary) 40%, transparent);
+  }
+
+  /* ---- 11. Progress bars: shimmer stripe on parent hover ---- */
+  .scribble-border:hover .h-full {
+    background-image: linear-gradient(90deg,
+      color-mix(in oklab, var(--lamp) 70%, white),
+      var(--primary),
+      color-mix(in oklab, var(--blossom) 90%, white),
+      var(--primary)) !important;
+    background-size: 200% 100%;
+    animation: bar-shimmer 1.6s linear infinite;
+  }
+  @keyframes bar-shimmer { to { background-position: -200% 0; } }
+
+  /* ---- 12. Cat avatar / stamp: wiggle on hover ---- */
+  .stamp:hover, [style*="🐈"]:hover {
+    animation: wiggle 500ms ease-in-out;
+  }
+  @keyframes wiggle {
+    0%,100% { transform: rotate(0); }
+    25%     { transform: rotate(-8deg) scale(1.08); }
+    75%     { transform: rotate(8deg) scale(1.08); }
+  }
+
+  /* ---- 13. Ruled input focus glow ---- */
+  input:focus, textarea:focus {
+    animation: input-glow 1.6s ease-in-out infinite;
+  }
+  @keyframes input-glow {
+    0%,100% { box-shadow: 0 4px 12px -6px color-mix(in oklab, var(--primary) 30%, transparent); }
+    50%     { box-shadow: 0 4px 22px -4px color-mix(in oklab, var(--primary) 55%, transparent); }
+  }
+}
+
+/* Mobile: disable all of the above extras. */
+@media (hover: none), (pointer: coarse), (max-width: 767px) {
+  .paper-card::after,
+  .polaroid::before,
+  .cozy-link::before { display: none !important; }
+  .magnetic:hover { animation: none !important; }
+}
+
