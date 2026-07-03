@@ -136,6 +136,7 @@ function Index() {
       <SeasonOrb />
       <VinylPlayer />
       {!isMobile && <CustomCursor />}
+      {!isMobile && <HoverGlow />}
 
       <button
         type="button"
