@@ -1620,3 +1620,34 @@ html { scroll-behavior: auto; } /* Lenis owns it */
   .magnetic:hover { animation: none !important; }
 }
 
+
+/* ============================================================
+   ScrollFx — compositor-only scroll reveals (IntersectionObserver).
+   Elements use data-sf="rise|fade|tilt|zoom|slide-l|slide-r|blur".
+   Only transform + opacity animate, so the GPU handles everything.
+   ============================================================ */
+[data-sf] {
+  opacity: 0;
+  will-change: transform, opacity;
+  transition:
+    transform 900ms cubic-bezier(.2,.7,.2,1),
+    opacity 700ms ease-out,
+    filter 700ms ease-out;
+}
+[data-sf="rise"]     { transform: translate3d(0, 40px, 0); }
+[data-sf="fade"]     { transform: none; }
+[data-sf="tilt"]     { transform: perspective(900px) rotateX(10deg) translate3d(0, 30px, 0); transform-origin: 50% 100%; }
+[data-sf="zoom"]     { transform: scale(0.94); }
+[data-sf="slide-l"]  { transform: translate3d(-60px, 0, 0); }
+[data-sf="slide-r"]  { transform: translate3d(60px, 0, 0); }
+[data-sf="blur"]     { transform: translate3d(0, 20px, 0); filter: blur(8px); }
+
+[data-sf].sf-visible {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-sf] { opacity: 1 !important; transform: none !important; filter: none !important; transition: none !important; }
+}
