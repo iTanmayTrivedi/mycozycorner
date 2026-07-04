@@ -206,7 +206,7 @@ function Index() {
 
       {/* MARQUEE — drifts with scroll */}
       <WavyDivider from="transparent" to="color-mix(in oklab, var(--blossom) 30%, transparent)" variant="wave" height={70} />
-      <div className="relative z-10 py-4" style={{ background: "color-mix(in oklab, var(--blossom) 30%, transparent)" }}>
+      <div className="relative z-10 py-4" data-sf="zoom" style={{ background: "color-mix(in oklab, var(--blossom) 30%, transparent)" }}>
         <ScrollMarquee
           items={["slow mornings", "warm tea", "soft pixels", "kind code", "quiet pages", "long walks"]}
           direction="left"
@@ -273,9 +273,9 @@ function Index() {
 
         <div className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
           {projects.map((p, i) => (
-            <Reveal key={p.title} variant="tilt-in" delay={i * 90}>
-              <div><Polaroid project={p} onOpen={openProjectAt} /></div>
-            </Reveal>
+            <div key={p.title} data-sf="tilt" data-sf-delay={i * 90}>
+              <Polaroid project={p} onOpen={openProjectAt} />
+            </div>
           ))}
         </div>
       </section>
@@ -337,8 +337,8 @@ function Index() {
       <section id="hello" className="relative z-10 mx-auto max-w-6xl px-5 py-16">
         <Reveal><SectionTitle kicker="chapter 4" title="Say hello" n="4" /></Reveal>
         <div className="mt-10 grid gap-8 md:grid-cols-[1.1fr_1fr]">
-          <Reveal variant="slide-right"><Postcard /></Reveal>
-          <Reveal variant="slide-left" delay={120}><Letterbox /></Reveal>
+          <div data-sf="slide-l"><Postcard /></div>
+          <div data-sf="slide-r" data-sf-delay={120}><Letterbox /></div>
         </div>
       </section>
 
