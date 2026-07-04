@@ -1,6 +1,6 @@
 <div align="center">
 
-# 私の縁側 — My Corner
+# 私の縁側 — Tanmay Trivedi
 ### *A slice-of-life portfolio, brewed slowly.*
 
 <sub><i>「静けさの中に、丁寧な仕事がある。」<br/>“In quietness, there is careful work.”</i></sub>
@@ -27,7 +27,7 @@
 
 ## 序 — Prologue
 
-**My Corner** is a personal portfolio built as an interactive *slice-of-life anime* — the warmth of **Studio Ghibli**, the after-school hush of **Kyoto Animation**, and the tactile grain of a *washi* notebook. Every section is a chapter: a train window, a student ID, a corkboard of polaroids, a slow train route, and finally, a hand-written letter.
+**Tanmay Trivedi's Portfolio** is a personal portfolio built as an interactive *slice-of-life anime* — the warmth of **Studio Ghibli**, the after-school hush of **Kyoto Animation**, and the tactile grain of a *washi* notebook. Every section is a chapter: a train window, a student ID, a corkboard of polaroids, a slow train route, and finally, a hand-written letter.
 
 It is not a template. It is a **quiet, opinionated craft object** — designed to make a recruiter pause, smile, and read to the end.
 
