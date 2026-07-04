@@ -21,16 +21,20 @@ import { SeasonOrb } from "@/components/cozy/SeasonOrb";
 import { useDeviceCaps } from "@/lib/device";
 import { CustomCursor } from "@/components/cozy/CustomCursor";
 import { HoverGlow } from "@/components/cozy/HoverGlow";
+import { ScrollFx } from "@/components/cozy/ScrollFx";
 
 
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "My Corner — A Cozy Slice-of-Life Portfolio" },
-      { name: "description", content: "A warm, hand-drawn portfolio. Coffee, code, and quiet afternoons." },
-      { property: "og:title", content: "My Corner — A Cozy Slice-of-Life Portfolio" },
-      { property: "og:description", content: "Coffee, code, and quiet afternoons. Step into my corner." },
+      { title: "Tanmay Trivedi — A Cozy Slice-of-Life Portfolio" },
+      { name: "description", content: "Tanmay Trivedi's warm, hand-drawn portfolio. Coffee, code, and quiet afternoons." },
+      { property: "og:title", content: "Tanmay Trivedi — A Cozy Slice-of-Life Portfolio" },
+      { property: "og:description", content: "Coffee, code, and quiet afternoons. Step into Tanmay's corner." },
+      { property: "og:image", content: "/readme/thumbnail.jpg" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: "/readme/thumbnail.jpg" },
     ],
   }),
   component: Index,
@@ -137,6 +141,7 @@ function Index() {
       <VinylPlayer />
       {!isMobile && <CustomCursor />}
       {!isMobile && <HoverGlow />}
+      <ScrollFx />
 
       <button
         type="button"
@@ -155,7 +160,7 @@ function Index() {
           <span className="grid h-10 w-10 place-items-center rounded-full bg-card shadow-paper" style={{ animation: "gentle-bounce 5s ease-in-out infinite" }}>
             <Cloud className="h-5 w-5 text-primary" />
           </span>
-          <span className="font-display text-2xl">my corner</span>
+          <span className="font-display text-2xl">tanmay trivedi</span>
         </a>
         <nav className="hidden gap-6 font-hand text-xl md:flex">
           <a href="#about" className="cozy-link">about</a>
@@ -177,7 +182,7 @@ function Index() {
           <Reveal variant="slide-right">
             <p className="font-hand text-2xl text-muted-foreground">~ a quiet portfolio ~</p>
             <h1 className="mt-3 font-serif text-5xl leading-[1.05] md:text-7xl">
-              Welcome to <span className="ink-underline"><MagneticLetters text="My Corner" /></span>
+              Welcome to <span className="ink-underline"><MagneticLetters text="Tanmay's Corner" /></span>
             </h1>
             <p className="mt-6 max-w-md text-lg text-muted-foreground">
               Pull up a chair. The kettle's on. I make small, careful things on the internet —
@@ -222,7 +227,7 @@ function Index() {
                 </div>
                 <div className="min-w-0">
                   <p className="font-hand text-lg text-muted-foreground">student ID · class of forever</p>
-                  <h3 className="truncate font-serif text-2xl">Sora Tanaka</h3>
+                  <h3 className="truncate font-serif text-2xl">Tanmay Trivedi</h3>
                   <p className="text-sm text-muted-foreground">designer · maker · daydreamer</p>
                 </div>
               </div>
@@ -341,7 +346,7 @@ function Index() {
         <p className="font-hand text-xl text-muted-foreground">
           made with <Heart className="inline h-4 w-4 -translate-y-0.5" /> and a warm cup of something
         </p>
-        <p className="mt-1 text-xs text-muted-foreground">© {new Date().getFullYear()} my corner. take your time. <span className="ml-2 opacity-70">psst — press <kbd className="rounded border border-border px-1.5 py-0.5 font-hand">m</kbd></span></p>
+        <p className="mt-1 text-xs text-muted-foreground">© {new Date().getFullYear()} tanmay trivedi. take your time. <span className="ml-2 opacity-70">psst — press <kbd className="rounded border border-border px-1.5 py-0.5 font-hand">m</kbd></span></p>
         <CatBubble />
       </footer>
 
@@ -637,7 +642,7 @@ function Postcard() {
             Thanks for wandering in. If anything here made you smile, write back. I read every letter
             with a fresh cup of tea, usually on Sunday mornings.
           </p>
-          <p className="mt-6 font-hand text-xl">— with care, Sora ♡</p>
+          <p className="mt-6 font-hand text-xl">— with care, Tanmay ♡</p>
         </div>
         <div className="relative p-6">
           <div className="absolute right-5 top-5 h-20 w-16 rotate-3 border-2 border-dashed border-border p-1 text-center">
@@ -647,7 +652,7 @@ function Postcard() {
           </div>
           <div className="mt-24 space-y-2 font-hand text-lg">
             <p className="border-b border-dashed border-border pb-1">To: someone kind</p>
-            <p className="border-b border-dashed border-border pb-1">@: hello@mycorner.cafe</p>
+            <p className="border-b border-dashed border-border pb-1">@: tanmay.trivedi.jp@gmail.com</p>
             <p className="border-b border-dashed border-border pb-1">re: a small idea</p>
           </div>
         </div>
