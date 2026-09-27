@@ -12,7 +12,7 @@
 
 <br/>
 
-<a href="https://tanmay-trivedi.lovable.app"><img alt="Live Site" src="https://img.shields.io/badge/◐-Live_Site-1a1a1a?style=for-the-badge&labelColor=e94b3c"/></a>
+<a href="https://mycozycorner.tanmaytrivedi.dev"><img alt="Live Site" src="https://img.shields.io/badge/◐-Live_Site-1a1a1a?style=for-the-badge&labelColor=e94b3c"/></a>
 <a href="/mnt/documents/Watashi-no-Engawa-Case-Study.pdf"><img alt="Case Study" src="https://img.shields.io/badge/◇-Case_Study_(PDF)-1a1a1a?style=for-the-badge&labelColor=c9a961"/></a>
 <a href="mailto:tanmay.trivedi.jp@gmail.com"><img alt="Contact" src="https://img.shields.io/badge/✉-tanmay.trivedi.jp%40gmail.com-1a1a1a?style=for-the-badge&labelColor=6b8e7f"/></a>
 
