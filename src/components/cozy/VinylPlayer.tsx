@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Music, Pause, Play } from "lucide-react";
-import track from "@/assets/kawaii-friends.mp3.asset.json";
 
 const tracks = [
-  { title: "kawaii friends — ckotty", src: track.url },
+  { title: "kawaii friends — ckotty", src: "/audio/kawaii-friends.mp3" },
 ];
 
 export function VinylPlayer() {
